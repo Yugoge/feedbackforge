@@ -47,7 +47,7 @@ export function ChatTranscript({
 }: Props) {
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-3 overflow-y-auto px-0 py-4 sm:px-4">
-      {messages.length === 0 && isLoading ? <EmptyState /> : null}
+      {messages.length === 0 ? <EmptyState /> : null}
       <MessageList
         messages={messages}
         showActionsOnLast={showActionsOnLast}
