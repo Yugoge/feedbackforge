@@ -1,8 +1,8 @@
 # dev
 
-*Last updated: 2026-04-26T11:11:43Z*
-**Total entries**: 5
-**Convention**: lower
+*Last updated: 2026-04-26T11:11:44Z*
+**Total entries**: 6
+**Convention**: kebab
 
 ## Tree
 ```
@@ -11,7 +11,8 @@ dev/
 │   ├── spec-20260426-102329/
 │   │   └── views/
 │   └── `spec-20260426-102329.md` - Spec: FeedbackForge → FeedbackCoach rebrand + 7 UI/prompt changes
-└── `ba-spec-20260426-110440.md` - BA Specification: FeedbackForge → FeedbackCoach rebrand + 7 prescribed UI/prompt changes
+├── `ba-spec-20260426-110440.md` - BA Specification: FeedbackForge → FeedbackCoach rebrand + 7 prescribed UI/prompt changes
+└── `context-20260426-110440.json` - json config
 ```
 
 ---
