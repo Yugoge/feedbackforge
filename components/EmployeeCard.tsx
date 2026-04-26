@@ -35,8 +35,11 @@ function EmployeeHeader({ employee }: Props) {
 
 function EmployeeBadges({ employee }: Props) {
   return (
-    <div className="flex flex-wrap gap-2">
-      <Badge variant="secondary">{employee.tenure}</Badge>
+    <div className="flex flex-wrap items-center gap-2">
+      <span className="inline-flex items-center gap-1 text-sm text-slate-500">
+        <Briefcase className="h-4 w-4 text-slate-500" aria-hidden="true" />
+        <span>{employee.tenure}</span>
+      </span>
       <Badge variant="secondary">{employee.age}yo</Badge>
     </div>
   );
