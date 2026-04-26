@@ -7,6 +7,12 @@
 
 ---
 
+## Role Mandate
+
+> <!-- WHO WRITES: PM-Retro -->
+
+---
+
 ## Cycle markers (PM tracks progress per cycle)
 
 ### Cycle 1
