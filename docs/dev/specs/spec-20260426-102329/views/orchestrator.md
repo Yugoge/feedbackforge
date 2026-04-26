@@ -64,48 +64,8 @@
 
 ---
 
-## Anti-Patterns
-
-Apply all 7 changes. Do not modify other parts of the code.
-
----
-
 ## Hard Rules Relevant to Orchestrator
 
 Apply all 7 changes. Do not modify other parts of the code.
 
 **No discrepancies severe enough to gate the loop** — the path-vs-component mismatches are absorbed as implementation notes above; intent is unambiguous.
-
----
-
-## Agent Relevance Analysis
-
-| Agent | Relevant | Reason |
-|-------|----------|--------|
-| ui-specialist | no | Visual choices already verbatim in Section 5 (text-4xl, bg-blue-600, gap-2, rounded-full); no separate design phase. |
-| ba | yes | Section 1 baseline analysis + Section 5 acceptance criterion ownership. |
-| dev | yes | Implements 7 changes across app/page.tsx, EmployeeCard.tsx, lib/employees.ts, components/DraftActions.tsx, lib/use-chat-page-actions.ts, lib/prompts.ts, app/layout.tsx. |
-| qa | yes | Verifies measured state per Section 4, raises fail evidence per Section 6. |
-| pm | yes (supervisory) | Triage/prioritization -- decides item order, monitors progress. NOT a pipeline stage. |
-| architect | no | No structural/dependency concerns raised in spec. |
-| product-owner | no | No PO role mentioned in spec annotations. |
-| user | no | User's acceptance criterion is already captured in Section 5; no interactive end-user role. |
-
-## Views Created
-
-- ba.md
-- dev.md
-- qa.md
-- pm.md
-- orchestrator.md
-
-## Monolith Sections
-
-- ## Section 1: Before
-- ## Section 2: What Was Attempted
-- ## Section 3: What Was Changed
-- ## Section 4: Current State
-- ## Section 5: User's Acceptance Criterion
-- ## Section 6: Why Not Met
-- ## Section 7: What Must Be Done
-- ## Section 8: Attention Notes
