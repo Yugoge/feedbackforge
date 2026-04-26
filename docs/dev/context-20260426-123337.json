@@ -1,0 +1,197 @@
+{
+  "request_id": "dev-20260426-123337",
+  "timestamp": "2026-04-26T12:33:37+00:00",
+  "requirement": {
+    "original": "Can the feedbackcoach be on top then normal company below. Such as: FeedbackCoach / NormalCompany - Marketing Team",
+    "clarified": "Stack the two inner row wrappers in DashboardHeader vertically (each on its own block-level line, centered) so the Sparkles+FeedbackCoach title row appears above the NC+company row. Behavior must hold on both desktop 1440x900 and mobile 390x844.",
+    "what": "Change two Tailwind classes (inline-flex -> flex) on the two inner row wrappers in DashboardHeader so both rows occupy their own line.",
+    "why": "User explicitly requested vertical stacking. Cycle 1 left the two rows as inline-flex which causes desktop side-by-side collapse.",
+    "where": ["app/page.tsx (DashboardHeader function, L10 and L14)"],
+    "scope": {
+      "included": ["app/page.tsx L10 className", "app/page.tsx L14 className"],
+      "excluded": [
+        "any other file",
+        "any structural HTML change in DashboardHeader",
+        "removal or modification of text-center on header",
+        "the NC circle's own classes (h-8 w-8 bg-blue-600 ...)",
+        "the <p> 'Logged in as Alex' line"
+      ]
+    },
+    "success_criteria": [
+      "DashboardHeader's title row and NC row each render on their own visual line at desktop 1440x900",
+      "Both rows render on their own line at mobile 390x844 (already true; must remain true)",
+      "Both rows are horizontally centered within the header",
+      "All Cycle 1 deliverables (H1 text, font-size, NC circle, Briefcase icon, tenure strings) are unchanged"
+    ],
+    "constraints": [
+      "Tailwind utility classes only — no new CSS file",
+      "No new wrappers, no new spans, no new IDs",
+      "Diff must be exactly two single-word substitutions"
+    ]
+  },
+  "root_cause_analysis": {
+    "symptom": "On desktop the title row and NC row collapse onto a single horizontal visual line instead of stacking",
+    "root_cause": "Both inner row wrappers use `inline-flex` (inline-level box). When parent <header> has enough horizontal space, two inline-level boxes lay out side-by-side. To force a stack, the boxes must be block-level (`flex`).",
+    "root_cause_commit": "c17716f — Cycle 1 commit that introduced inline-flex on both wrappers (per spec-20260426-102329 Section 3)",
+    "why_introduced": "Cycle 1's BA chose inline-flex to keep each row's content as a centered group. The original spec did not require row-stacking, so QA accepted the layout.",
+    "why_problematic": "User now wants stacked vertical layout; inline-flex prevents the rows from claiming their own line on viewports with sufficient horizontal width.",
+    "timeline": "Introduced 2026-04-26 (Cycle 1 commit c17716f). Reported 2026-04-26 by user post-commit.",
+    "affected_files": ["app/page.tsx"],
+    "evidence_type": "mixed",
+    "observations": [
+      "title-row wrapper className contains 'inline-flex items-center justify-center gap-2' (observed: Read app/page.tsx:10)",
+      "NC-row wrapper className contains 'mt-2 inline-flex items-center justify-center gap-2 text-sm text-slate-500' (observed: Read app/page.tsx:14)",
+      "QA Cycle 1 Section 4 reports the desktop side-by-side collapse (observed: spec-20260426-102329.md Section 4 'Layout note' line)",
+      "Mobile viewport 390x844 already stacks because narrow width forces the second inline-flex box to wrap (observed: QA Cycle 1 screenshot dashboard-mobile-390x844.png)"
+    ],
+    "diagnosis_completeness": "complete",
+    "complaint_location_keywords": ["feedbackcoach", "normal company", "NormalCompany", "Marketing Team"],
+    "localization_evidence": "User explicitly references the dashboard header strings 'FeedbackCoach' and 'NormalCompany - Marketing Team'. These strings exist verbatim in app/page.tsx:12 (h1) and L21 (span inside NC row). The DashboardHeader function spans L7-28 of app/page.tsx. QA Cycle 1 already measured and confirmed the rendered output for these elements.",
+    "located_source": "app/page.tsx:7-28 (DashboardHeader function); specifically the two inner row wrappers at L10 and L14",
+    "localization_blocked": null,
+    "git_bisect_result": {
+      "triggered": false,
+      "suspect_commit": null,
+      "commit_message": null,
+      "confirmed_by": null,
+      "bisect_blocked": "N/A — not a regression. The 'symptom' was introduced as part of the legitimate Cycle 1 implementation that satisfied the (then-existing) acceptance criteria. User added a NEW criterion in this cycle.",
+      "reproducibility_verified": false
+    }
+  },
+  "diagnosis_layer": "L1",
+  "target_layer": "L1",
+  "requirements_decomposition": [
+    {"id": "R1", "source_phrase": "Can the feedbackcoach be on top", "acceptance_criterion": "Title row (Sparkles + FeedbackCoach) renders on its own block-level line, horizontally centered, on both desktop 1440x900 and mobile 390x844."},
+    {"id": "R2", "source_phrase": "then normal company below", "acceptance_criterion": "NC circle + 'NormalCompany — Marketing Team' span renders on its own block-level line BELOW the title row, horizontally centered, on both desktop 1440x900 and mobile 390x844."}
+  ],
+  "component_chain": [
+    {
+      "file": "app/page.tsx",
+      "line_range": "7-28",
+      "role": "DashboardHeader functional component — owns the entire two-row + footer-paragraph header markup",
+      "imports_from": ["leaf"],
+      "evidence": "Read app/page.tsx returned the full DashboardHeader source; lines 10 and 14 hold the two inline-flex divs",
+      "verified_via": "Read"
+    },
+    {
+      "file": "app/page.tsx",
+      "line_range": "31-45",
+      "role": "Home (default export) — renders <DashboardHeader /> and the cards section",
+      "imports_from": ["app/page.tsx (DashboardHeader)"],
+      "evidence": "Read app/page.tsx:34 shows <DashboardHeader />",
+      "verified_via": "Read"
+    }
+  ],
+  "pre_existing_guards": [
+    {
+      "file": "app/page.tsx",
+      "line": 11,
+      "type": "a11y-attr",
+      "code_snippet": "<Sparkles className=\"h-6 w-6 text-blue-600\" aria-hidden=\"true\" />",
+      "purpose": "Decorative icon hidden from AT — must remain on the title row",
+      "removal_authorized": false
+    },
+    {
+      "file": "app/page.tsx",
+      "line": 17,
+      "type": "a11y-attr",
+      "code_snippet": "aria-label=\"NormalCompany\"",
+      "purpose": "AT label for the NC circle (visual text 'NC' is a glyph, not a word)",
+      "removal_authorized": false
+    },
+    {
+      "file": "app/page.tsx",
+      "line": 23,
+      "type": "structural",
+      "code_snippet": "<p className=\"mt-1 text-xs text-slate-400\">Logged in as Alex, Marketing Team Manager</p>",
+      "purpose": "Footer paragraph; must remain a sibling of the two row divs, not nested inside either",
+      "removal_authorized": false
+    }
+  ],
+  "setup": {
+    "viewport": "BOTH 1440x900 desktop AND 390x844 mobile",
+    "theme": "light",
+    "locale": "en",
+    "auth_state": "N/A",
+    "data_state": "with-data (4 employees from lib/employees.ts)",
+    "browser": "Chrome desktop (Playwright)",
+    "url_path": "/"
+  },
+  "evidence": {
+    "observed": "User: 'Can the feedbackcoach be on top then normal company below. Such as: FeedbackCoach / NormalCompany - Marketing Team'",
+    "measured": {
+      "value": "title-row wrapper uses 'inline-flex items-center justify-center gap-2'; NC-row wrapper uses 'mt-2 inline-flex items-center justify-center gap-2 text-sm text-slate-500'",
+      "location": "app/page.tsx:10 and app/page.tsx:14"
+    },
+    "expected": {
+      "value": "Both wrappers use block-level 'flex' (drop the 'inline-' prefix on both)",
+      "source": "User's verbatim mockup 'FeedbackCoach / NormalCompany - Marketing Team' (slash = line break) in the orchestrator prompt for dev-20260426-123337"
+    },
+    "gap": "Two single-word class substitutions: 'inline-flex' -> 'flex' on app/page.tsx:10 AND app/page.tsx:14"
+  },
+  "scope_expansion": {
+    "search_pattern": "inline-flex.*items-center.*justify-center inside DashboardHeader",
+    "search_scope": "app/page.tsx",
+    "user_reported": ["app/page.tsx"],
+    "additional_found": [],
+    "all_occurrences": ["app/page.tsx:10", "app/page.tsx:14"]
+  },
+  "reference_source": {
+    "tier": "tier_1_external",
+    "description": "User's verbatim mockup describing the desired layout (slash-separated lines)",
+    "url_or_location": "Orchestrator prompt body for dev-20260426-123337 (cycle 2 of spec-20260426-102329)",
+    "copy_allowed": true
+  },
+  "prior_attempts": {
+    "triggered": true,
+    "trigger_source": "dedup_hit",
+    "attempts": [
+      {
+        "artifact_path": "spec-20260426-102329.md (Cycle 1) and commit c17716f",
+        "proposed_solution": "Implement CHANGES 1+2 with inline-flex wrappers, satisfying the spec's literal CHANGE 2 acceptance (NC left of company text, gap-2, vertically centered).",
+        "actual_change": "app/page.tsx:10 and L14 use inline-flex; produced single-line desktop layout.",
+        "outcome": "PASSED Cycle 1 QA. Not a failure — the acceptance criteria did not mandate row stacking. User then added a NEW requirement.",
+        "failure_category": "other",
+        "target_layer": "L1"
+      }
+    ],
+    "novelty_check": {
+      "this_attempt_layer": "L1",
+      "differs_from_all_priors": true,
+      "rationale": "Same layer (L1 cosmetic Tailwind), but the action is different: Cycle 1 chose inline-flex (correct then). Cycle 2 changes to flex to satisfy a NEW user criterion. Contract D's 'must use a different layer' rule applies to retries of FAILED attempts; Cycle 1 was a PASS, so layer-level reuse is correct here. The change is qualitatively novel because it answers a new question, not the same question."
+    }
+  },
+  "context": {
+    "codebase_state": "Working tree clean post-c17716f. Only INDEX.md modified (auto-sync hook).",
+    "recent_commits": "c17716f commit(20260426-110440): Close Debate Report; ace1dc6 Apply cycle 2 fixes: Tailwind lib/ glob + chat EmptyState gate; 10f3f83 Initial bootstrap (Next.js 14 + MiniMax Anthropic)",
+    "file_contents": {
+      "app/page.tsx_DashboardHeader_L7_28": "function DashboardHeader() { return ( <header className=\"mb-12 py-8 text-center sm:mb-16 sm:py-10\"> <div className=\"inline-flex items-center justify-center gap-2\"> <Sparkles className=\"h-6 w-6 text-blue-600\" aria-hidden=\"true\" /> <h1 className=\"text-4xl font-bold text-slate-900\">FeedbackCoach</h1> </div> <div className=\"mt-2 inline-flex items-center justify-center gap-2 text-sm text-slate-500\"> <div className=\"flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white\" aria-label=\"NormalCompany\">NC</div> <span>NormalCompany — Marketing Team</span> </div> <p className=\"mt-1 text-xs text-slate-400\">Logged in as Alex, Marketing Team Manager</p> </header> ); }"
+    },
+    "dependencies": {},
+    "environment": {
+      "next_version": "14.2.35",
+      "tailwind_version": "3.4.17"
+    }
+  },
+  "development_approach": {
+    "strategy": "Two single-word Tailwind class substitutions in app/page.tsx. No structural change. No other file touched.",
+    "files_to_create": [],
+    "files_to_modify": ["app/page.tsx"],
+    "validation_approach": "Playwright at desktop 1440x900 and mobile 390x844 reads getComputedStyle(div).display for both inner rows (must be 'flex'), reads bounding boxes (NC row top > title row bottom; both centered within header), and captures screenshots."
+  },
+  "research_findings": {
+    "searched": false,
+    "reason": "Trivial CSS display-mode flip with unambiguous user mockup; no design discretion or pattern research needed."
+  },
+  "regression_investigation_checklist": {
+    "triggered": false,
+    "items": []
+  },
+  "standards_to_enforce": {
+    "no_hardcoded_values": true,
+    "yaml_frontmatter_description_only": true,
+    "integer_step_numbering": true,
+    "meaningful_naming": true,
+    "git_root_cause_reference": true
+  }
+}
