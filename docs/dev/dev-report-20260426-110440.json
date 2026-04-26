@@ -1,0 +1,125 @@
+{
+  "request_id": "dev-20260426-110440",
+  "timestamp": "2026-04-26T11:30:00+00:00",
+  "dev_report_path": "docs/dev/dev-report-20260426-110440.json",
+  "dev": {
+    "status": "completed",
+    "tasks_completed": [
+      {
+        "id": 1,
+        "description": "CHANGE 3a: Updated 4 tenure strings in lib/employees.ts",
+        "type": "config",
+        "files_modified": ["lib/employees.ts"],
+        "changes": "L11 '1 year' -> '1 year at NormalCompany'; L21 '7 years' -> '7 years at NormalCompany'; L31 '5 years' -> '5 years at NormalCompany'; L41 '2 years' -> '2 years at NormalCompany'",
+        "rationale": "Verbatim per spec Section 5 lines 136-139. No casing/punctuation deviation."
+      },
+      {
+        "id": 2,
+        "description": "CHANGE 3b: Replaced tenure Badge with Briefcase icon + plain text in EmployeeCard",
+        "type": "code",
+        "files_modified": ["components/EmployeeCard.tsx"],
+        "changes": "Added `import { Briefcase } from 'lucide-react'`; in EmployeeBadges() replaced `<Badge variant=\"secondary\">{employee.tenure}</Badge>` with `<span className=\"inline-flex items-center gap-1 text-sm text-slate-500\"><Briefcase className=\"h-4 w-4 text-slate-500\" aria-hidden=\"true\" /><span>{employee.tenure}</span></span>`. Wrapper div added `items-center` for vertical alignment with the still-present age Badge.",
+        "rationale": "BA spec line 63 redirects spec's `app/page.tsx` path to `components/EmployeeCard.tsx` since the dashboard card markup lives there. Age Badge preserved per pre_existing_guard L159."
+      },
+      {
+        "id": 3,
+        "description": "CHANGES 1+2: Rebrand header to FeedbackCoach, text-4xl bold, centered, larger padding, NC logo",
+        "type": "code",
+        "files_modified": ["app/page.tsx"],
+        "changes": "Extracted header markup into new local `DashboardHeader()` component (required by quality-gate hook — Home grew past 30-line max). Header className: `mb-8 sm:mb-10` -> `mb-12 py-8 text-center sm:mb-16 sm:py-10`. Inner div: `flex items-center gap-2` -> `inline-flex items-center justify-center gap-2`. h1: `text-2xl font-bold` -> `text-4xl font-bold`; text 'FeedbackForge' -> 'FeedbackCoach'. Replaced the company-team `<p>` with an `inline-flex items-center justify-center gap-2` div containing a 32px circle (`flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white aria-label=\"NormalCompany\">NC</div>`) followed by a `<span>` with the company text.",
+        "rationale": "Padding choice 'mb-12 py-8 sm:mb-16 sm:py-10' picked to be visibly larger than baseline `mb-8 sm:mb-10` (BA R4). text-4xl + font-bold per spec line 121. text-center on the header element centers all 3 children (h1 + company-team row + Logged-in line) per BA Edge Cases note line 144. NC circle sized via Tailwind h-8 w-8 (32px), bg-blue-600, rounded-full, white bold NC centered — verbatim spec lines 128-129. Added aria-label='NormalCompany' for screen-reader friendliness (BA C1)."
+      },
+      {
+        "id": 4,
+        "description": "CHANGE 1: Updated app/layout.tsx browser-tab metadata title",
+        "type": "config",
+        "files_modified": ["app/layout.tsx"],
+        "changes": "L8 `title: \"FeedbackForge\"` -> `title: \"FeedbackCoach\"`",
+        "rationale": "User said 'any other place the name appears'; this is the browser tab title, user-facing."
+      },
+      {
+        "id": 5,
+        "description": "CHANGE 4: Removed Start Over button from DraftActions",
+        "type": "code",
+        "files_modified": ["components/DraftActions.tsx"],
+        "changes": "Removed the third <Button> block (baseline L30-36) entirely. Stopped destructuring `onStartOver` in function signature: `({ onAccept, onRefine, onStartOver }: Props)` -> `({ onAccept, onRefine }: Props)`. Kept `onStartOver` in the `Props` type (BA S1) so spread-prop callers (components/ChatTranscript.tsx) keep typechecking.",
+        "rationale": "BA spec line 65 redirects spec's `app/feedback/[id]/page.tsx` path to `components/DraftActions.tsx`. BA S1 advises preserving the hook's external interface to minimize blast radius — the prop wiring stays, only the rendered button is gone."
+      },
+      {
+        "id": 6,
+        "description": "CHANGE 5: Clipboard write + new toast + 3000ms delay in onAccept handler",
+        "type": "code",
+        "files_modified": ["lib/use-chat-page-actions.ts", "components/ChatPageBody.tsx"],
+        "changes": "lib/use-chat-page-actions.ts: added `import type { Message } from '@/lib/types'`; extended Args type with `messages: Message[]`; added `ACCEPT_TOAST` const (verbatim spec line 156-157); added `getLastAssistantContent(messages)` helper that walks the array tail-to-head for the last assistant message and returns `.content ?? ''`; rewrote onAccept body to call `void navigator.clipboard?.writeText(draft)` inside try/catch, then `setToast(ACCEPT_TOAST)` and `setTimeout(() => router.push('/'), 3000)`. components/ChatPageBody.tsx L92-96: added `messages: session.messages` to the useChatPageActions call site (one new line).",
+        "rationale": "BA M6 dictates the 2-file edit. Best-effort try/catch around clipboard.writeText per BA Edge Cases line 142 (insecure context, denied permission, missing user gesture won't block toast/navigation). 3000ms verbatim per spec line 159. Toast string extracted to const for easy verification."
+      },
+      {
+        "id": 7,
+        "description": "CHANGES 1+6+7: Rebrand prompt + insert META-RULES + replace harassment line in lib/prompts.ts",
+        "type": "code",
+        "files_modified": ["lib/prompts.ts"],
+        "changes": "L3 comment 'FeedbackForge Coach system prompt' -> 'FeedbackCoach system prompt'. L6 prompt opening 'You are FeedbackForge Coach, ...' -> 'You are FeedbackCoach, ...' (dropped redundant 'Coach' suffix per BA AC1 note since the brand IS the coach). Replaced baseline L91-92 single 2-line harassment line with the verbatim 10-line block from spec Section 5 lines 183-193 (CHANGE 7). Inserted verbatim 10-line META-RULES block from spec Section 5 lines 165-176 immediately above the CONSTRAINTS: line, with blank-line separators on each side (CHANGE 6).",
+        "rationale": "All copy verbatim from spec — no paraphrasing. META-RULES placed BETWEEN SPECIAL CASES and CONSTRAINTS as required by spec line 162. Harassment block replaces the existing one in-place inside SPECIAL CASES (no section reorder)."
+      }
+    ],
+    "scripts_created": [],
+    "git_rationale": {
+      "root_cause_commit": "N/A — feature/edit bundle from user spec, not a bug fix",
+      "why_issue_occurred": "User issued 7 prescribed verbatim CHANGES in spec Section 5; this is a feature delivery, not a regression",
+      "how_fix_addresses_root": "All 7 CHANGES applied verbatim per Section 5; success criteria are static text/markup matches that map 1:1 to the spec"
+    },
+    "diff_stats": {
+      "files_changed": 8,
+      "lines_added": 86,
+      "lines_removed": 37,
+      "new_symbols_introduced": [
+        "DashboardHeader (local function in app/page.tsx, not exported)",
+        "ACCEPT_TOAST (module-level const in lib/use-chat-page-actions.ts)",
+        "getLastAssistantContent (module-level helper in lib/use-chat-page-actions.ts)"
+      ],
+      "minimum_possible_lines_estimate": 80,
+      "justification_for_overage": "The 7 CHANGES touch 8 files and include verbatim 10-line block insertions (CHANGE 6 + CHANGE 7). The +86/-37 = 49 net-add count is dominated by the two prompt blocks (~20 lines) plus the new DashboardHeader extraction (~22 lines) which was forced by the quality-gate hook (Home() exceeded 30-line max after CHANGES 1+2 expanded the header). Without the hook, the diff would be ~12 lines smaller. ACCEPT_TOAST + getLastAssistantContent helpers in CHANGE 5 add ~8 lines but are justified by readability + verbatim-toast verification (BA risk note line 142 also requires a try/catch wrapper). All other edits are minimum-diff."
+    },
+    "fix_layer": "L1+L3+L4",
+    "scope_review_requested": false,
+    "qa_ready": true,
+    "qa_notes": "Validation evidence: (1) `npx tsc --noEmit` returned zero output (clean typecheck). (2) `npm run build` finished with '✓ Compiled successfully' and 6/6 static pages generated, all 4 routes built (/, /_not-found, /api/chat, /feedback/[id]). (3) `grep -rn FeedbackForge --include=*.ts --include=*.tsx app/ lib/ components/` returns 0 matches (proof of CHANGE 1 R1). (4) `grep -rn FeedbackCoach --include=*.ts --include=*.tsx app/ lib/ components/` returns 4 matches: lib/prompts.ts:3, lib/prompts.ts:6, app/layout.tsx:8, app/page.tsx:12 (proof of CHANGE 1 R1 — at least 4 hits). (5) `grep 'Start Over' components/DraftActions.tsx` returns 0 matches (proof of CHANGE 4 R8). (6) META-RULES block at lib/prompts.ts:106 is positioned before CONSTRAINTS at lib/prompts.ts:117 (proof of CHANGE 6 R12). (7) Harassment line at lib/prompts.ts:91 starts with 'Harassment, discrimination, safety, or legal concerns' (verbatim spec replacement; old 'Flag for HR escalation' string is gone — proof of CHANGE 7 R13). QA should run Playwright at desktop 1440x900 + mobile 390x844 to verify visual ACs (h1 computed font-size ~36px, NC circle bounding box ~32px, header centered, padding visibly larger). For CHANGE 5 clipboard, QA needs to grant clipboard permissions in Playwright context and click Accept & Save in a drafted session, then assert clipboard text equals the last assistant message body and that toast text equals exactly the verbatim string and navigation happens at ~3000ms.",
+    "permissions_to_add": [],
+    "blast_radius": [
+      {"modified": "app/page.tsx", "imported_by": []},
+      {"modified": "app/layout.tsx", "imported_by": []},
+      {"modified": "components/EmployeeCard.tsx", "imported_by": ["app/page.tsx"]},
+      {"modified": "components/DraftActions.tsx", "imported_by": ["components/ChatTranscript.tsx"]},
+      {"modified": "components/ChatPageBody.tsx", "imported_by": ["app/feedback/[id]/page.tsx"]},
+      {"modified": "lib/employees.ts", "imported_by": ["app/page.tsx", "app/feedback/[id]/page.tsx"]},
+      {"modified": "lib/use-chat-page-actions.ts", "imported_by": ["components/ChatPageBody.tsx"]},
+      {"modified": "lib/prompts.ts", "imported_by": ["app/api/chat/route.ts"]}
+    ],
+    "implementation_notes": [
+      "CHANGE 1: kept the existing Sparkles icon next to the h1 (BA W5 — user did not say to remove it).",
+      "CHANGE 1 padding choice: used `mb-12 py-8 sm:mb-16 sm:py-10` — visibly larger than baseline `mb-8 sm:mb-10`. Documented in spec Section 2 Cycle 1.",
+      "CHANGE 1 brand rename: the system prompt opening now reads 'You are FeedbackCoach' (not 'You are FeedbackCoach Coach') because the literal substring rebrand 'FeedbackForge Coach' -> 'FeedbackCoach Coach' would introduce redundancy. BA AC1 line 156 explicitly authorizes this judgment.",
+      "CHANGE 2 NC logo: also added `aria-label=\"NormalCompany\"` (BA C1 — small a11y improvement, no scope expansion).",
+      "CHANGE 4: kept `onStartOver` in the Props type but stopped destructuring it. Caller `components/ChatTranscript.tsx` spreads `{...draftActions}` so removing the prop entirely would require a 3-file edit instead of 1. BA S1 explicitly recommends this minimum-diff approach.",
+      "CHANGE 5: extracted ACCEPT_TOAST as a module-level const so the verbatim spec string is greppable + reusable for QA assertions. Defensive `getLastAssistantContent` walks the tail of the messages array — handles the unlikely case where a user message is appended after the draft (BA Edge Cases line 143).",
+      "CHANGE 5 clipboard try/catch: BA risk note line 142 — `navigator.clipboard.writeText` can reject. Best-effort fire-and-forget via `void` + try/catch wrapper, no fallback path (per BA: silent best-effort is acceptable since toast + navigation continue).",
+      "Quality-gate hook intervention: extracting `DashboardHeader()` from `Home()` was forced by the pretool-quality-gate.py hook (max 30 lines per function). Documented in spec Section 2 Cycle 1.",
+      "INDEX.md files (root + app/ + components/ + lib/) were auto-regenerated by a doc-sync hook outside dev's scope — they appear in `git status` but contain only timestamp/entry-count updates, no source code."
+    ],
+    "self_verification": {
+      "build": "pass",
+      "smoke_check": "pass (typecheck + production build both clean; greppable proofs all match expected counts)",
+      "notes": "Local dev server NOT started (no need — typecheck + build are sufficient for static-text/markup edits and respect the project rule against ad-hoc nohup'd servers). Production systemd unit NOT restarted (orchestrator/user can decide if/when to deploy)."
+    },
+    "spec_update": {
+      "spec_file": "/root/feedbackforge/docs/dev/specs/spec-20260426-102329.md",
+      "section_2_cycle_1": "populated with approach + per-CHANGE rationale + validation summary",
+      "section_3_cycle_1": "populated with full file:line edit list in 'old -> new' format, grouped per file/CHANGE"
+    }
+  },
+  "blocking_issues": [],
+  "recommendations": [
+    "QA run order suggestion: (a) Playwright dashboard at 1440x900 -> assert FeedbackCoach h1 (text-4xl ~36px font-bold), header text-center, NC circle 32px to LEFT of company text with 8px gap, 4 cards each show Briefcase icon + correct tenure string. (b) Same at 390x844 mobile. (c) Browser tab title 'FeedbackCoach'. (d) /feedback/ken: drive chat to drafted state, assert exactly 2 buttons (Accept & Save + Refine Further), click Accept & Save with clipboard-read permission granted, assert clipboard text equals last assistant message body, assert toast text == verbatim spec string, assert navigation to / at ~3000ms. (e) Read lib/prompts.ts post-edit and verify META-RULES block ABOVE CONSTRAINTS, harassment block contains 'End your message as a CONCLUSION'. (f) Optional runtime trigger: send 'I think Ken is being harassed by another employee' in chat and verify response does not ask follow-up questions and ends as a conclusion.",
+    "Production deploy path: `sudo systemctl restart feedbackforge` after merge — only if user explicitly requests live verification on https://forge.life-ai.app. Local build is sufficient for sign-off."
+  ]
+}
