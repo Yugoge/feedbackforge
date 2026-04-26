@@ -1,0 +1,77 @@
+{
+  "request_id": "dev-20260426-123337",
+  "timestamp": "2026-04-26T12:33:37+00:00",
+  "dev_report_path": "docs/dev/dev-report-20260426-123337.json",
+  "dev": {
+    "status": "completed",
+    "tasks_completed": [
+      {
+        "id": 1,
+        "description": "Switched DashboardHeader title-row wrapper from inline-flex to flex (app/page.tsx:10)",
+        "type": "code_edit",
+        "files_modified": ["app/page.tsx"],
+        "changes": "L10 className: 'inline-flex items-center justify-center gap-2' -> 'flex items-center justify-center gap-2'",
+        "rationale": "inline-flex makes the wrapper inline-level which causes the two siblings inside the centered <header> to collapse onto one horizontal line on wide viewports. flex makes it block-level so the title row consumes its own line via normal block flow."
+      },
+      {
+        "id": 2,
+        "description": "Switched DashboardHeader NC-row wrapper from inline-flex to flex (app/page.tsx:14)",
+        "type": "code_edit",
+        "files_modified": ["app/page.tsx"],
+        "changes": "L14 className: 'mt-2 inline-flex items-center justify-center gap-2 text-sm text-slate-500' -> 'mt-2 flex items-center justify-center gap-2 text-sm text-slate-500'",
+        "rationale": "Same root cause as task 1; after this change the NC + company-text row stacks below the title row on both desktop 1440x900 and mobile 390x844 while remaining horizontally centered (justify-center preserved)."
+      },
+      {
+        "id": 3,
+        "description": "Appended Cycle 2 subsections to Sections 2 and 3 of spec-20260426-102329.md",
+        "type": "doc_update",
+        "files_modified": ["docs/dev/specs/spec-20260426-102329.md"],
+        "changes": "Added '### Cycle 2' under Section 2 (approach + rationale + validation) and under Section 3 (exact file:line edits). Sections 1, 4, 5, 6, 7, 8 and all Cycle 1 entries left untouched.",
+        "rationale": "Per orchestrator instruction — spec is a living document; Cycle 2 entries record this cycle's approach and exact diff for downstream cycles."
+      }
+    ],
+    "scripts_created": [],
+    "git_rationale": {
+      "root_cause_commit": "c17716f — Cycle 1 commit that introduced inline-flex on both DashboardHeader inner row wrappers",
+      "why_issue_occurred": "Cycle 1's BA chose inline-flex to keep each row's content as a centered group; the original spec did not require row-stacking, so QA accepted the layout. The user added a NEW row-stacking requirement post-Cycle-1-close.",
+      "how_fix_addresses_root": "Switching from inline-flex (inline-level) to flex (block-level) on both wrappers makes each row claim its own line via normal block flow. justify-center preserves horizontal centering inside each row; existing text-center on <header> is harmless on flex block boxes. Mobile 390x844 was already stacking via wrap; this change preserves mobile while fixing desktop."
+    },
+    "diff_stats": {
+      "files_changed": 1,
+      "lines_added": 2,
+      "lines_removed": 2,
+      "new_symbols_introduced": [],
+      "minimum_possible_lines_estimate": 2,
+      "justification_for_overage": null
+    },
+    "fix_layer": "L1",
+    "scope_review_requested": false,
+    "qa_ready": true,
+    "qa_notes": "Playwright at desktop 1440x900 and mobile 390x844: read getComputedStyle(div).display for the title-row div (L10) and NC-row div (L14) — both must report 'flex' (not 'inline-flex'). Read bounding boxes — NC-row div top > title-row div bottom on desktop (and mobile, where it was already true). For each row, verify (box.left + box.width/2) is within +/-2px of (header.left + header.width/2). Capture screenshots: docs/dev/screenshots/dashboard-desktop-1440x900-stacked.png and dashboard-mobile-390x844-stacked.png. AC4 regression check: H1 still 'FeedbackCoach' at 36px, NC circle still 32x32 bg-blue-600, EmployeeCard tenure rendering unchanged.",
+    "permissions_to_add": [],
+    "blast_radius": [
+      {
+        "modified": "app/page.tsx",
+        "imported_by": [],
+        "note": "app/page.tsx is the Next.js App Router page entrypoint for '/'. Only ChatPageBody.tsx contained an import string match, but inspection (grep result) shows no actual cross-file consumers of app/page.tsx — Next App Router files are routed by filesystem, not imported. Zero downstream consumers."
+      }
+    ],
+    "self_verification": {
+      "build": "pass",
+      "smoke_check": "skipped (no executable smoke command in context; production server is on :3025 via systemd and per orchestrator instructions must NOT be restarted; QA will run Playwright validation)",
+      "notes": "Verification evidence: (a) Read app/page.tsx after edit — L10 = 'flex items-center justify-center gap-2', L14 = 'mt-2 flex items-center justify-center gap-2 text-sm text-slate-500'. (b) grep -n 'inline-flex' /root/feedbackforge/app/page.tsx -> 0 hits. (c) npx tsc --noEmit -> exit 0, zero output. (d) git diff --stat HEAD -- app/page.tsx -> '1 file changed, 2 insertions(+), 2 deletions(-)' — exactly the minimum-diff."
+    },
+    "spec_update": {
+      "file": "docs/dev/specs/spec-20260426-102329.md",
+      "sections_appended": ["Section 2 / ### Cycle 2", "Section 3 / ### Cycle 2"],
+      "sections_untouched": ["Section 1 (sealed)", "Section 4 (sealed)", "Section 5 (sealed)", "Section 6", "Section 7", "Section 8", "All Cycle 1 entries"],
+      "cycle2_section2_summary": "Approach: two single-word inline-flex -> flex substitutions. Rationale: BA root-cause analysis identified inline-level boxes as the desktop side-by-side collapse cause; flex block-level wrappers stack via normal block flow. Same layer (L1) as Cycle 1 — Contract D allows L1 reuse because Cycle 1 PASSED and Cycle 2 addresses a NEW criterion.",
+      "cycle2_section3_summary": "app/page.tsx:10 inline-flex -> flex; app/page.tsx:14 inline-flex -> flex. No other source files touched. INDEX.md auto-modifications by doc-sync hook flagged as out-of-scope (same as Cycle 1)."
+    }
+  },
+  "blocking_issues": [],
+  "recommendations": [
+    "QA should specifically capture computed display style for both inner row divs at desktop 1440x900 (the regression-prone viewport) — both must read 'flex' not 'inline-flex'.",
+    "Consider whether future cycles should add a Tailwind lint rule discouraging inline-flex on top-level header rows where stacking is the intended visual; out of scope for this cycle but a low-cost guardrail."
+  ]
+}
