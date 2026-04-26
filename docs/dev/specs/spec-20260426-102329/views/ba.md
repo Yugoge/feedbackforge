@@ -25,35 +25,26 @@
 
 ---
 
-## Section 5: User's Acceptance Criterion (BA owns this)
+## Section 5: BA-owned acceptance criterion (per-CHANGE prose framing)
 
-Make the following changes to the FeedbackForge app:
-
-CHANGE 1 — Rename and rebrand the app
 In app/page.tsx and any other place the name appears:
 
-CHANGE 2 — Add NC logo next to NormalCompany
 On the dashboard, next to the "NormalCompany — Marketing Team" text,
 add a circular NC logo on the LEFT side. Create it inline as a div:
 
-CHANGE 3 — Make tenure more explicit in dashboard cards
 naturally:
 directly without a badge wrapper, with a small briefcase icon
 
-CHANGE 4 — Remove "Start Over" button
 In app/feedback/[id]/page.tsx, remove the "Start Over" action button
 entirely from the action buttons section. Keep only "Accept & Save"
 and "Refine Further".
 
-CHANGE 5 — Accept & Save copies BOTH draft and delivery guidance
 When the "Accept & Save" button is clicked, instead of just showing
 a toast, copy the COMPLETE final assistant message (which contains
 both "Feedback Draft" and "Delivery Guidance" sections) to the
 
-CHANGE 6 — Stop AI from leaking system instructions
 In lib/prompts.ts, add this section near the end of the system prompt,
 before the CONSTRAINTS block:
 
-CHANGE 7 — Sensitive case: redirect to HR and CONCLUDE the conversation
 In lib/prompts.ts, find the SPECIAL CASES section and replace the
 "Harassment/discrimination/safety" handling with this exact text:
