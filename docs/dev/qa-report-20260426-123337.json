@@ -1,0 +1,299 @@
+{
+  "request_id": "dev-20260426-123337",
+  "timestamp": "2026-04-26T12:46:00+00:00",
+  "qa": {
+    "status": "pass",
+    "user_verbatim_complaint": "Can the feedbackcoach be on top then normal company below. Such as: FeedbackCoach / NormalCompany - Marketing Team",
+    "verified_against_complaint": true,
+    "verified_location_keywords": ["app", "page.tsx", "dashboardheader", "feedbackcoach", "normalcompany", "marketing", "team"],
+    "location_overlap": ["feedbackcoach", "normalcompany", "marketing", "team"],
+    "complaint_resolution_evidence": "Both inner row wrappers in DashboardHeader (app/page.tsx L10 and L14) switched from inline-flex to flex (block-level). Live measurement at desktop 1440x900: titleRow.bottom=128 <= ncRow.top=136 (8px gap, vertically stacked). Mobile 390x844 same stacking with 8px gap. Both rows centered (offset = 0px from header center). Screenshots confirm 'FeedbackCoach' renders on the top visual line and 'NC NormalCompany — Marketing Team' renders on its own line below — exactly the user's mockup.",
+    "complaint_element_pointer": {
+      "selector": "main > header > div:nth-child(1) (title row, contains Sparkles svg + h1 'FeedbackCoach') AND main > header > div:nth-child(2) (NC row, contains aria-label='NormalCompany' div + span 'NormalCompany — Marketing Team')",
+      "how_located": "DOM traversal — header element queried, then :scope > div children enumerated. titleRow contains the H1; ncRow contains the [aria-label='NormalCompany'] circle and the company-team span.",
+      "found_in_dom": true,
+      "page_url": "http://localhost:3055/"
+    },
+    "element_screenshots": {
+      "before_selector": "header > div:nth-child(1), header > div:nth-child(2)",
+      "before_path": "docs/dev/screenshots/dashboard-desktop-1440x900.png (Cycle 1 baseline — both rows on single horizontal line at desktop)",
+      "after_path": "docs/dev/screenshots/cycle2-dashboard-desktop.png (Cycle 2 after — rows stacked vertically)",
+      "same_element_verified": true
+    },
+    "overall_assessment": "Cycle 2 fully satisfies the user's verbatim ask. Two inline-flex -> flex substitutions in app/page.tsx L10/L14 produce vertical stacking on both desktop 1440x900 (gap 8px, both rows centered offset 0px) and mobile 390x844 (gap 8px, both rows centered offset 0px). All Cycle 1 deliverables (CHANGE 1 H1 36px bold 'FeedbackCoach' centered header, CHANGE 2 NC circle 32x32 bg-blue-600 with white 'NC' adjacent to company text, CHANGE 3 Briefcase tenure cards) remain intact — no regression. Zero console errors, zero warnings. TypeScript clean. Build/diff matches dev report exactly (1 file, 2 lines changed).",
+    "success_criteria_results": [
+      {
+        "requirement_id": "R1",
+        "source_phrase": "Can the feedbackcoach be on top",
+        "criterion": "Title row (Sparkles + 'FeedbackCoach') renders on its own block-level line, horizontally centered, on both desktop 1440x900 and mobile 390x844.",
+        "verification_method": "browser_evaluate getComputedStyle(titleRow).display + getBoundingClientRect at both viewports",
+        "status": "pass",
+        "result": "pass",
+        "details": "titleRow.display='flex' (block-level) at both 1440x900 and 390x844. Desktop: rect top=88, bottom=128, width=848 (fills header content-width); center offset from header center = 0px. Mobile: top=72, bottom=112, width=343; center offset = 0px. Sparkles svg is children[0] and h1 is children[1] within the title row (adjacency preserved).",
+        "evidence": "Desktop measurement: {display:'flex', rect:{top:88,bottom:128,width:848}, centerOffsetFromHeader:0}. Mobile measurement: {display:'flex', rect:{top:72,bottom:112,width:343}, centerOffsetFromHeader:0}. Screenshots cycle2-dashboard-desktop.png and cycle2-dashboard-mobile.png."
+      },
+      {
+        "requirement_id": "R2",
+        "source_phrase": "then normal company below",
+        "criterion": "NC + 'NormalCompany — Marketing Team' row renders on its own block-level line BELOW the title row, horizontally centered, on both viewports.",
+        "verification_method": "browser_evaluate getComputedStyle(ncRow).display + bounding-box top/bottom comparison vs titleRow",
+        "status": "pass",
+        "result": "pass",
+        "details": "ncRow.display='flex' at both viewports. Desktop: ncRow.top=136 strictly greater than titleRow.bottom=128 (8px gap from mt-2). Mobile: ncRow.top=120 > titleRow.bottom=112 (8px gap). NC circle [aria-label='NormalCompany'] is children[0] and company-text span is children[1] (adjacency preserved). Both rows centered (offset 0px from header center).",
+        "evidence": "Desktop: titleRow.bottom=128, ncRow.top=136, vertically_stacked=true, gap=8. Mobile: titleRow.bottom=112, ncRow.top=120, vertically_stacked=true, gap=8. Both ncRow.centerOffsetFromHeader=0."
+      },
+      {
+        "requirement_id": "AC3",
+        "source_phrase": "Center the entire header section (Cycle 1 Section 5 — must not regress)",
+        "criterion": "Both rows centered within header (each row's center within ±2px of header center).",
+        "verification_method": "browser_evaluate (box.left + box.width/2) - (header.left + header.width/2) for both rows at both viewports",
+        "status": "pass",
+        "result": "pass",
+        "details": "Desktop 1440x900: header center X=720; titleRow center X=720 (offset 0px); ncRow center X=720 (offset 0px). Mobile 390x844: titleRow centerOffset=0px; ncRow centerOffset=0px. <header> retains text-center (Cycle 1 preserved) and each flex row uses justify-center (Cycle 1 preserved).",
+        "evidence": "All four offsets measured = 0px, well within ±2px tolerance."
+      },
+      {
+        "requirement_id": "AC4",
+        "source_phrase": "No regression of Cycle 1 deliverables",
+        "criterion": "H1 'FeedbackCoach' at 36px bold; NC circle 32x32 bg-blue-600 white; tenure cards with Briefcase icon + 'N year[s] at NormalCompany' for all 4 employees; page title 'FeedbackCoach'; zero console errors.",
+        "verification_method": "browser_evaluate getComputedStyle for h1 and NC circle; DOM snapshot for tenure cards; document.title; browser_console_messages",
+        "status": "pass",
+        "result": "pass",
+        "details": "H1: text='FeedbackCoach', fontSize=36px, fontWeight=700, color=rgb(15,23,42). NC circle: width=32px, height=32px, backgroundColor=rgb(37,99,235) (bg-blue-600), color=white, borderRadius=9999px, fontWeight=700, text='NC'. Tenure cards: all 4 employees show Briefcase img + correct tenure string ('1 year at NormalCompany' Ken, '7 years' Jenny, '5 years' John, '2 years' Clara). Page title 'FeedbackCoach'. Console: 0 errors, 0 warnings on the fresh :3055 server.",
+        "evidence": "DOM snapshot at /, browser_evaluate computed styles, browser_console_messages level=warning returned 0 messages."
+      }
+    ],
+    "_success_criteria_rule": "BA's requirements_decomposition has 2 items (R1, R2); BA spec also lists 4 acceptance criteria (AC1-AC4). All 4 verified with measured evidence.",
+    "root_cause_verification": {
+      "addressed": true,
+      "confidence": "high",
+      "rationale": "Root cause per BA: 'inline-flex' on both inner row wrappers caused inline-level layout, which collapses two siblings onto a single horizontal line on wide viewports. Cycle 2 changed both wrappers to 'flex' (block-level). Live measurement confirms display:'flex' on both rows and stacking is now achieved by normal block flow at both target viewports. The fix is at the same source location BA identified (app/page.tsx:10 and L14) and addresses the exact mechanism (inline-level -> block-level)."
+    },
+    "build_verification": {
+      "status": "pass",
+      "build_command": "npx tsc --noEmit + Next.js dev build (incremental on PORT=3055)",
+      "deploy_command": "PORT=3055 timeout 120 npm run dev (foreground; auto-terminates)",
+      "build_output_summary": "tsc --noEmit exit 0, zero output. Next.js: 'Ready in 2s' on PORT 3055 (Next.js 14.2.35). Pre-existing :3010 dev server had stale CSS/JS chunks (CSS 404), so QA spawned fresh server to verify against post-Cycle-2 source.",
+      "service_healthy": true,
+      "changes_verified_live": true,
+      "skip_reason": null
+    },
+    "script_quality_results": [],
+    "regression_test_results": [
+      {
+        "test": "H1 text + size unchanged from Cycle 1",
+        "result": "pass",
+        "details": "H1 text='FeedbackCoach', fontSize=36px (text-4xl), fontWeight=700"
+      },
+      {
+        "test": "NC circle dimensions/colors unchanged from Cycle 1",
+        "result": "pass",
+        "details": "NC circle 32x32px, bg-blue-600, white text, rounded-full, font-bold — all preserved"
+      },
+      {
+        "test": "Tenure strings + Briefcase icon present on all 4 employee cards",
+        "result": "pass",
+        "details": "DOM snapshot confirms 'N year[s] at NormalCompany' on all 4 cards with Briefcase svg"
+      },
+      {
+        "test": "Page title still 'FeedbackCoach'",
+        "result": "pass",
+        "details": "document.title='FeedbackCoach'"
+      },
+      {
+        "test": "Sparkles adjacent to H1 within title row (no internal regression)",
+        "result": "pass",
+        "details": "titleRow.children[0] is the Sparkles svg, children[1] is the h1"
+      },
+      {
+        "test": "NC circle adjacent to company text within NC row (no internal regression)",
+        "result": "pass",
+        "details": "ncRow.children[0] is the [aria-label='NormalCompany'] div, children[1] is the company-team span"
+      },
+      {
+        "test": "TypeScript clean",
+        "result": "pass",
+        "details": "npx tsc --noEmit exit 0, zero output"
+      },
+      {
+        "test": "Zero console errors / warnings",
+        "result": "pass",
+        "details": "Fresh :3055 server: 0 errors, 0 warnings (only React DevTools info advisory). Existing stale :3010 server has unrelated chunk 404s — not caused by Cycle 2."
+      }
+    ],
+    "code_quality_findings": [],
+    "permissions_verification": {
+      "status": "pass",
+      "permissions_count": 0,
+      "validated_permissions": [],
+      "issues": []
+    },
+    "hardcode_scan_results": {
+      "files_scanned": 1,
+      "violations": [],
+      "summary": {
+        "critical": 0,
+        "major": 0,
+        "minor": 0
+      }
+    },
+    "standards_compliance": {
+      "checked": true,
+      "violations": []
+    },
+    "app_understanding_flow": {
+      "executed": true,
+      "core_flow_completed": true,
+      "steps_completed": 3,
+      "baseline_screenshots": ["docs/dev/screenshots/cycle2-dashboard-desktop.png", "docs/dev/screenshots/cycle2-dashboard-mobile.png"],
+      "errors_found_during_flow": [],
+      "app_not_running": false
+    },
+    "ui_test_results": [
+      {
+        "scenario": "Desktop 1440x900: H1 'FeedbackCoach' on top line, NC + 'NormalCompany — Marketing Team' on its own line below, both centered",
+        "url": "http://localhost:3055/",
+        "status": "pass",
+        "reason": null,
+        "steps_performed": [
+          "browser_resize 1440x900",
+          "browser_navigate http://localhost:3055/",
+          "browser_evaluate to read computed styles + bounding rects for both rows",
+          "browser_take_screenshot cycle2-dashboard-desktop.png"
+        ],
+        "assertions": [
+          {
+            "expected": "titleRow getComputedStyle.display === 'flex' (not 'inline-flex')",
+            "actual": "'flex'",
+            "passed": true
+          },
+          {
+            "expected": "ncRow getComputedStyle.display === 'flex'",
+            "actual": "'flex'",
+            "passed": true
+          },
+          {
+            "expected": "titleRow.bottom <= ncRow.top (vertically stacked, not collapsed)",
+            "actual": "128 <= 136 (8px gap)",
+            "passed": true
+          },
+          {
+            "expected": "Both rows' horizontal center within ±2px of header center",
+            "actual": "titleRow offset=0px, ncRow offset=0px (header center=720)",
+            "passed": true
+          },
+          {
+            "expected": "H1 text 'FeedbackCoach', fontSize 36px",
+            "actual": "'FeedbackCoach', 36px",
+            "passed": true
+          },
+          {
+            "expected": "NC circle 32x32, bg=rgb(37,99,235), color=white",
+            "actual": "32px x 32px, rgb(37,99,235), rgb(255,255,255)",
+            "passed": true
+          }
+        ],
+        "evidence": "docs/dev/screenshots/cycle2-dashboard-desktop.png + browser_evaluate JSON output",
+        "dynamic_verification": {
+          "before_screenshot": "docs/dev/screenshots/dashboard-desktop-1440x900.png (Cycle 1 — collapsed)",
+          "after_screenshot": "docs/dev/screenshots/cycle2-dashboard-desktop.png (Cycle 2 — stacked)",
+          "user_visible_change_confirmed": true
+        }
+      },
+      {
+        "scenario": "Mobile 390x844: same vertical stacking, both rows centered",
+        "url": "http://localhost:3055/",
+        "status": "pass",
+        "reason": null,
+        "steps_performed": [
+          "browser_resize 390x844",
+          "browser_evaluate to read display + bounding rects",
+          "browser_take_screenshot cycle2-dashboard-mobile.png"
+        ],
+        "assertions": [
+          {
+            "expected": "titleRow.display === 'flex' AND ncRow.display === 'flex'",
+            "actual": "Both 'flex'",
+            "passed": true
+          },
+          {
+            "expected": "titleRow.bottom (112) <= ncRow.top (120)",
+            "actual": "112 <= 120 (8px gap)",
+            "passed": true
+          },
+          {
+            "expected": "Both rows centered (offset within ±2px)",
+            "actual": "titleRow offset=0px, ncRow offset=0px",
+            "passed": true
+          }
+        ],
+        "evidence": "docs/dev/screenshots/cycle2-dashboard-mobile.png + browser_evaluate JSON output",
+        "dynamic_verification": {
+          "before_screenshot": "docs/dev/screenshots/dashboard-mobile-390x844.png (Cycle 1 — already stacked via wrap)",
+          "after_screenshot": "docs/dev/screenshots/cycle2-dashboard-mobile.png (Cycle 2 — explicit block-level stack)",
+          "user_visible_change_confirmed": true
+        }
+      },
+      {
+        "scenario": "Console hygiene check on /",
+        "url": "http://localhost:3055/",
+        "status": "pass",
+        "reason": null,
+        "steps_performed": [
+          "browser_console_messages level=warning"
+        ],
+        "assertions": [
+          {
+            "expected": "Zero errors, zero warnings introduced by Cycle 2",
+            "actual": "0 errors, 0 warnings (1 info-level React DevTools advisory unrelated)",
+            "passed": true
+          }
+        ],
+        "evidence": "browser_console_messages output: total=1, errors=0, warnings=0"
+      }
+    ],
+    "output_quality_verification": {
+      "checked": true,
+      "output_type": "rendered_ui",
+      "completeness": "all sections populated",
+      "quality_assessment": "good",
+      "specific_checks": [
+        {"check": "Header renders 3 visual rows (title, NC+company, logged-in)", "result": "pass", "details": "DOM snapshot shows headers > div, div, p in order; visually confirmed in screenshot"},
+        {"check": "Title row visually above NC row at desktop", "result": "pass", "details": "titleRow.bottom=128 < ncRow.top=136"},
+        {"check": "Title row visually above NC row at mobile", "result": "pass", "details": "titleRow.bottom=112 < ncRow.top=120"},
+        {"check": "Both rows centered horizontally", "result": "pass", "details": "Center offsets = 0px on both viewports"},
+        {"check": "All 4 employee cards still rendering", "result": "pass", "details": "DOM snapshot lists Ken, Jenny, John, Clara cards with avatars, descriptions, tenure with Briefcase, age badge, Give Feedback button"}
+      ],
+      "verdict": "pass"
+    },
+    "focus_criteria_results": {
+      "criteria_provided": false,
+      "criteria_count": 0,
+      "results": [],
+      "all_passed": true
+    },
+    "generated_tests": [],
+    "all_findings": [],
+    "summary": {
+      "critical_issues": 0,
+      "major_issues": 0,
+      "minor_issues": 0,
+      "total_findings": 0,
+      "release_recommendation": "approve"
+    }
+  },
+  "self_verification": {
+    "claims_total": 18,
+    "claims_with_evidence": 18,
+    "claims_superficial": 0,
+    "superficial_details": [],
+    "confidence": "high"
+  },
+  "iteration_needed": false,
+  "refined_context": null,
+  "notes": [
+    "Existing :3010 dev server (PID 458805 from Cycle 1 QA) had stale CSS/JS chunks 404'ing — Tailwind utilities did not load on it. QA started a fresh foreground 'PORT=3055 timeout 120 npm run dev' (PID 722544) to verify against the actual post-Cycle-2 source. Verification was performed against :3055 only.",
+    "Safety hook blocked an explicit pkill of the fresh :3055 server. The 'timeout 120' wrapper guarantees self-termination ~12:46 UTC. The cleanup-orphan-next-server.timer (per /root/feedbackforge/CLAUDE.md) reaps any deep orphans hourly.",
+    "Existing :3010 and production :3025 servers were NOT touched by QA."
+  ]
+}

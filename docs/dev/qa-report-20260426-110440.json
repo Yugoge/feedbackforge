@@ -1,0 +1,439 @@
+{
+  "request_id": "dev-20260426-110440",
+  "timestamp": "2026-04-26T11:45:00+00:00",
+  "qa": {
+    "status": "pass",
+    "user_verbatim_complaint": "Make the following changes to the FeedbackForge app: CHANGE 1 — Rename and rebrand the app... (7 numbered CHANGES verbatim from spec-20260426-102329 Section 5 lines 207-286)",
+    "verified_against_complaint": true,
+    "verified_location_keywords": [
+      "app", "page.tsx", "layout.tsx", "components", "EmployeeCard.tsx", "DraftActions.tsx", "ChatPageBody.tsx",
+      "lib", "employees.ts", "use-chat-page-actions.ts", "prompts.ts",
+      "feedback", "ken", "FeedbackCoach", "FeedbackForge", "NormalCompany", "Briefcase", "META-RULES", "Harassment"
+    ],
+    "location_overlap": [
+      "app", "page.tsx", "layout.tsx", "lib", "prompts.ts", "employees.ts",
+      "feedback", "FeedbackCoach", "FeedbackForge", "NormalCompany", "Briefcase", "META-RULES", "Harassment", "Start Over"
+    ],
+    "complaint_resolution_evidence": "All 7 CHANGES from Section 5 verified verbatim and visually: rebrand+header (CHANGE 1, h1=36px bold centered with 144px vertical padding/margin), NC logo (CHANGE 2, 32x32 blue-600 circle to LEFT of company text), tenure+Briefcase (CHANGE 3, 4 verbatim strings + 16x16 slate-500 icon, no Badge wrapper), Start Over removed (CHANGE 4, exactly 2 buttons in DraftActions.tsx), clipboard/toast/3000ms (CHANGE 5, all wired in lib/use-chat-page-actions.ts), META-RULES inserted before CONSTRAINTS (CHANGE 6, verbatim 10-line block at L106-115), harassment redirect (CHANGE 7, verbatim 10-line block at L91-100, 'Flag for HR escalation' gone).",
+    "complaint_element_pointer": {
+      "selector": "header (app/page.tsx) + EmployeeCard div + DraftActions div + lib/prompts.ts SPECIAL CASES + META-RULES blocks",
+      "how_located": "DOM querySelectors (header, [aria-label='NormalCompany'], svg.lucide-briefcase, span containing 'at NormalCompany') + file reads of lib/prompts.ts, lib/use-chat-page-actions.ts, components/DraftActions.tsx, lib/employees.ts",
+      "found_in_dom": true,
+      "page_url": "http://localhost:3010/ and http://localhost:3010/feedback/ken"
+    },
+    "element_screenshots": {
+      "before_selector": "n/a (feature delivery, not regression — no 'before' screenshot baseline established by previous cycle)",
+      "before_path": null,
+      "after_path": "/root/feedbackforge/docs/dev/screenshots/dashboard-desktop-1440x900.png",
+      "same_element_verified": true
+    },
+    "overall_assessment": "All 7 CHANGES applied verbatim per spec Section 5. Static greps clean (FeedbackForge: 0 hits; FeedbackCoach: 4 hits; Flag for HR escalation: 0 hits). tsc --noEmit returns exit 0. Live browser verification on dev server (localhost:3010) at both desktop 1440x900 and mobile 390x844 viewports confirms all visible UI changes. 0 console errors/warnings. The only observation worth noting is a minor desktop-layout quirk where the h1+sparkles inline-flex and the NC+company inline-flex collapse onto a single visual line because both are inline-level and the desktop header has enough horizontal space; on mobile they correctly stack as two rows. This satisfies the literal BDD criteria (NC is to the LEFT of the company text with gap-2, vertically centered) and Section 5 does not mandate row-stacking, so flagged for transparency only — not a spec violation.",
+    "success_criteria_results": [
+      {
+        "requirement_id": "R1",
+        "source_phrase": "Change the app name from \"FeedbackForge\" to \"FeedbackCoach\"",
+        "criterion": "All 4 in-app source occurrences read 'FeedbackCoach'; grep 'FeedbackForge' returns 0 results in app/, components/, lib/.",
+        "verification_method": "Grep tool against app/ lib/ components/ for both strings, plus DOM h1 textContent check via Playwright",
+        "status": "pass",
+        "result": "pass",
+        "details": "FeedbackForge: 0 hits across app/ lib/ components/. FeedbackCoach: 4 hits at lib/prompts.ts:3, lib/prompts.ts:6, app/layout.tsx:8, app/page.tsx:12. DOM h1 textContent = 'FeedbackCoach'. Browser tab title = 'FeedbackCoach'.",
+        "evidence": "grep results + Playwright DOM evaluate result (h1.text='FeedbackCoach') + screenshot dashboard-desktop-1440x900.png"
+      },
+      {
+        "requirement_id": "R2",
+        "source_phrase": "Make the title significantly bigger (text-4xl) and bold",
+        "criterion": "The dashboard <h1> className contains both text-4xl and font-bold (or equivalent — must include text-4xl).",
+        "verification_method": "Playwright getComputedStyle + className inspection",
+        "status": "pass",
+        "result": "pass",
+        "details": "h1 className = 'text-4xl font-bold text-slate-900'. Computed font-size = 36px (Tailwind text-4xl = 2.25rem * 16 = 36px). Computed font-weight = 700 (font-bold).",
+        "evidence": "Playwright browser_evaluate output — h1.fontSize='36px', h1.fontWeight='700', h1.classList contains 'text-4xl font-bold'"
+      },
+      {
+        "requirement_id": "R3",
+        "source_phrase": "Center the entire header section",
+        "criterion": "Header <header> element on app/page.tsx is horizontally centered.",
+        "verification_method": "Playwright getComputedStyle (textAlign) + visual screenshot",
+        "status": "pass",
+        "result": "pass",
+        "details": "header className = 'mb-12 py-8 text-center sm:mb-16 sm:py-10'. Computed text-align = 'center'. All 3 children (h1+sparkles row, NC+company row, Logged-in line) visually centered in screenshot.",
+        "evidence": "Playwright getComputedStyle textAlign='center' + dashboard-desktop-1440x900.png + dashboard-mobile-390x844.png"
+      },
+      {
+        "requirement_id": "R4",
+        "source_phrase": "Increase the margin/padding around the header",
+        "criterion": "Margin/padding around the header is visibly larger than current mb-8 sm:mb-10.",
+        "verification_method": "Playwright getComputedStyle (paddingTop/Bottom, marginTop/Bottom)",
+        "status": "pass",
+        "result": "pass",
+        "details": "Desktop 1440x900: pt=40px pb=40px mt=0px mb=64px (total ~144px vertical). Mobile 390x844: pt=32px pb=32px mb=48px (total ~112px). Baseline was mb-8 sm:mb-10 (32-40px) with no padding. New value is ~3-4× larger.",
+        "evidence": "Playwright getComputedStyle output"
+      },
+      {
+        "requirement_id": "R5",
+        "source_phrase": "next to the \"NormalCompany — Marketing Team\" text, add a circular NC logo on the LEFT side ... 32px size, bg-blue-600, white bold text \"NC\" centered ... rounded-full ... inline-flex with the company text, gap-2 ... Vertically aligned center",
+        "criterion": "A div rendered immediately before the company text, classes include h-8 w-8, bg-blue-600, rounded-full, content NC (white + bold/font-semibold), parent uses inline-flex items-center gap-2.",
+        "verification_method": "Playwright DOM inspection + getBoundingClientRect + getComputedStyle",
+        "status": "pass",
+        "result": "pass",
+        "details": "NC div: text='NC', bbox=32x32px, bg=rgb(37,99,235)=blue-600, color=rgb(255,255,255)=white, font-weight=700 (bold), border-radius=9999px (rounded-full), aria-label='NormalCompany'. Parent inline-flex with gap-2 (8px measured between NC and company text). NC.x < companyText.x (LEFT side ✓). Same row vertical center alignment ✓.",
+        "evidence": "Playwright getComputedStyle/getBoundingClientRect output + dashboard-desktop-1440x900.png + dashboard-mobile-390x844.png"
+      },
+      {
+        "requirement_id": "R6",
+        "source_phrase": "update each employee's tenure field to read naturally: Ken: \"1 year at NormalCompany\" / Jenny: \"7 years at NormalCompany\" / John: \"5 years at NormalCompany\" / Clara: \"2 years at NormalCompany\"",
+        "criterion": "lib/employees.ts tenure values match exactly (case + punctuation).",
+        "verification_method": "Read of lib/employees.ts + DOM textContent check",
+        "status": "pass",
+        "result": "pass",
+        "details": "lib/employees.ts L11='1 year at NormalCompany' (Ken), L21='7 years at NormalCompany' (Jenny), L31='5 years at NormalCompany' (John), L41='2 years at NormalCompany' (Clara). All 4 dashboard cards render the verbatim string. Chat topbar at /feedback/ken also flows the longer string correctly.",
+        "evidence": "Read tool output for lib/employees.ts + Playwright tenureTexts array confirming all 4 verbatim strings render"
+      },
+      {
+        "requirement_id": "R7",
+        "source_phrase": "display this tenure text directly without a badge wrapper, with a small briefcase icon (Briefcase from lucide-react) next to it in slate-500 color",
+        "criterion": "components/EmployeeCard.tsx no longer wraps employee.tenure in <Badge>; instead renders <Briefcase className=\"... text-slate-500\" /> + <span>{employee.tenure}</span>. Briefcase imported from lucide-react.",
+        "verification_method": "Read of EmployeeCard.tsx + DOM SVG inspection",
+        "status": "pass",
+        "result": "pass",
+        "details": "components/EmployeeCard.tsx:4 imports Briefcase from lucide-react. L39-42: tenure rendered as <span class='inline-flex items-center gap-1 text-sm text-slate-500'><Briefcase class='h-4 w-4 text-slate-500' aria-hidden='true' /><span>{employee.tenure}</span></span>. NO Badge wrapper around tenure. Age Badge preserved at L43. DOM check: 4 lucide-briefcase SVGs rendered, each 16x16px, color rgb(100,116,139)=slate-500.",
+        "evidence": "Read tool output for components/EmployeeCard.tsx + Playwright briefcaseIcons array (4 elements, all h-4 w-4 text-slate-500) + screenshot"
+      },
+      {
+        "requirement_id": "R8",
+        "source_phrase": "remove the \"Start Over\" action button entirely from the action buttons section. Keep only \"Accept & Save\" and \"Refine Further\"",
+        "criterion": "components/DraftActions.tsx rendered output contains exactly 2 buttons; 'Start Over' string and its <Button> wrapper are gone.",
+        "verification_method": "Read of DraftActions.tsx + grep for 'Start Over'",
+        "status": "pass",
+        "result": "pass",
+        "details": "components/DraftActions.tsx contains exactly 2 <Button> blocks: 'Accept & Save' (L17-22, bg-green-600) and 'Refine Further' (L23-29, outline blue). Grep 'Start Over' across app/ lib/ components/: 1 hit, but only as a code comment at DraftActions.tsx:12 ('// CHANGE 4: \"Start Over\" button removed...'). No rendered 'Start Over' string. Live runtime verification of 2-button render skipped because reaching 'drafted' state requires working MiniMax API — static markup verification authorized by QA prompt.",
+        "evidence": "Read tool output + Grep tool output (1 comment-only hit)"
+      },
+      {
+        "requirement_id": "R9",
+        "source_phrase": "copy the COMPLETE final assistant message ... to the clipboard using navigator.clipboard.writeText()",
+        "criterion": "onAccept calls navigator.clipboard.writeText(<content of the last message with role==='assistant'>).",
+        "verification_method": "Read of lib/use-chat-page-actions.ts (static wiring authorized by QA prompt)",
+        "status": "pass",
+        "result": "pass",
+        "details": "lib/use-chat-page-actions.ts:31 — `const draft = getLastAssistantContent(messages);`. Helper at L16-21 walks `messages` array tail-to-head, returns content of last role==='assistant' message. L33: `void navigator.clipboard?.writeText(draft);` inside try/catch (best-effort per BA risk note). components/ChatPageBody.tsx:96 threads session.messages into the hook.",
+        "evidence": "Read tool output for lib/use-chat-page-actions.ts and components/ChatPageBody.tsx"
+      },
+      {
+        "requirement_id": "R10",
+        "source_phrase": "Show a success message: \"Copied to clipboard! Both the feedback draft and delivery guidance are ready to paste into your notes.\"",
+        "criterion": "Toast string exactly equals 'Copied to clipboard! Both the feedback draft and delivery guidance are ready to paste into your notes.'",
+        "verification_method": "Read + Grep of lib/use-chat-page-actions.ts",
+        "status": "pass",
+        "result": "pass",
+        "details": "lib/use-chat-page-actions.ts:13-14 — `const ACCEPT_TOAST = \"Copied to clipboard! Both the feedback draft and delivery guidance are ready to paste into your notes.\";`. L39: `setToast(ACCEPT_TOAST);`. Verbatim match against spec Section 5 line 247-248.",
+        "evidence": "Read tool output + Grep 'Copied to clipboard' returns 1 hit at L14"
+      },
+      {
+        "requirement_id": "R11",
+        "source_phrase": "After 3 seconds, navigate back to dashboard",
+        "criterion": "setTimeout(() => router.push(\"/\"), 3000) (or equivalent 3000ms).",
+        "verification_method": "Read + Grep of lib/use-chat-page-actions.ts",
+        "status": "pass",
+        "result": "pass",
+        "details": "lib/use-chat-page-actions.ts:40 — `setTimeout(() => router.push(\"/\"), 3000);`. Was 2000ms, now 3000ms.",
+        "evidence": "Read tool output + Grep 'setTimeout.*3000' returns 1 hit at L40"
+      },
+      {
+        "requirement_id": "R12",
+        "source_phrase": "add this section near the end of the system prompt, before the CONSTRAINTS block: META-RULES (NEVER VIOLATE) ...",
+        "criterion": "lib/prompts.ts contains the META-RULES block verbatim, positioned immediately before the line CONSTRAINTS:.",
+        "verification_method": "Read of lib/prompts.ts + line-by-line verbatim diff against spec Section 5 lines 165-176",
+        "status": "pass",
+        "result": "pass",
+        "details": "lib/prompts.ts:106-115 contains the verbatim META-RULES block. CONSTRAINTS: starts at L117. Block separator: blank line at L116 only. File order is SPECIAL CASES (L87-104) → blank L105 → META-RULES (L106-115) → blank L116 → CONSTRAINTS (L117). Verbatim diff: 0 differences against spec lines 165-176.",
+        "evidence": "Read tool output for lib/prompts.ts:87-121 — block content matches spec character-for-character"
+      },
+      {
+        "requirement_id": "R13",
+        "source_phrase": "find the SPECIAL CASES section and replace the \"Harassment/discrimination/safety\" handling with this exact text: ...",
+        "criterion": "The existing line 'Harassment/discrimination/safety: Do NOT draft feedback. Flag for HR escalation.' is gone; the verbatim Section-5-lines-183-193 replacement block is in its place inside SPECIAL CASES.",
+        "verification_method": "Read of lib/prompts.ts + grep for 'Flag for HR escalation' + verbatim diff against spec",
+        "status": "pass",
+        "result": "pass",
+        "details": "lib/prompts.ts:91-100 contains the verbatim 10-line replacement block beginning 'Harassment, discrimination, safety, or legal concerns: Do NOT draft formal feedback...' and ending 'The conversation ends here.' Block stays inside SPECIAL CASES section between 'Nothing to say' bullet (L88-90) and 'Emotionally charged venting' bullet (L101-102). Grep 'Flag for HR escalation' across app/ lib/ components/: 0 hits — old line is gone. Verbatim diff against spec lines 274-284: 0 differences.",
+        "evidence": "Read tool output for lib/prompts.ts:87-104 + Grep 'Flag for HR escalation' returns 0 hits"
+      },
+      {
+        "requirement_id": "R14",
+        "source_phrase": "Do not modify other parts of the code",
+        "criterion": "Files outside the affected-file list above are unchanged.",
+        "verification_method": "Cross-reference dev report's files_modified list (8 files) against BA spec's affected-file list (8 files) + tsc clean confirms no broken references",
+        "status": "pass",
+        "result": "pass",
+        "details": "Dev modified exactly the 8 files listed in BA spec: app/page.tsx, app/layout.tsx, components/EmployeeCard.tsx, components/DraftActions.tsx, components/ChatPageBody.tsx, lib/employees.ts, lib/use-chat-page-actions.ts, lib/prompts.ts. INDEX.md auto-regen by doc-sync hook is out of scope per dev report note. tsc --noEmit returns exit 0 (no broken references).",
+        "evidence": "dev_report.tasks_completed[].files_modified union = 8 files, matches BA Scope Contract B affected-file list"
+      },
+      {
+        "requirement_id": "AC8",
+        "source_phrase": "Build + typecheck clean",
+        "criterion": "npm run build (or npm run lint && tsc --noEmit) succeeds with zero errors.",
+        "verification_method": "Run npx tsc --noEmit",
+        "status": "pass",
+        "result": "pass",
+        "details": "npx tsc --noEmit → exit 0, zero output. Dev's report also confirmed npm run build → '✓ Compiled successfully, 6/6 static pages generated, 4 routes built'.",
+        "evidence": "tsc --noEmit exit code 0"
+      }
+    ],
+    "_success_criteria_rule": "BA had 14 R-items in requirements_decomposition + 1 AC8. QA verified all 14 + AC8 = 15 total entries above. No omission.",
+    "root_cause_verification": {
+      "addressed": true,
+      "confidence": "high",
+      "rationale": "This is a feature/edit bundle, not a bug fix — root cause is N/A. All 7 CHANGES were applied verbatim per spec Section 5. The BDD acceptance criteria (R1-R14 + AC8) all pass with concrete evidence (browser-measured CSS values, file content reads, grep counts, tsc exit code, screenshots)."
+    },
+    "build_verification": {
+      "status": "pass",
+      "build_command": "npx tsc --noEmit (typecheck) + the existing dev server (next-server v14.2.35 on PID 458805) is hot-loaded from source",
+      "deploy_command": "n/a — Next.js dev server hot-reloads on file save; production systemd unit not restarted (orchestrator decides)",
+      "build_output_summary": "tsc --noEmit exit 0, zero output. Server returns HTTP 200 on / and serves the post-CHANGE markup (verified by grep on rendered HTML for FeedbackCoach + by Playwright DOM inspection).",
+      "service_healthy": true,
+      "changes_verified_live": true,
+      "skip_reason": null
+    },
+    "script_quality_results": [],
+    "regression_test_results": [
+      {
+        "test": "Console errors on dashboard /",
+        "result": "pass",
+        "details": "0 errors, 0 warnings (only 1 React DevTools info advisory)"
+      },
+      {
+        "test": "Console errors on /feedback/ken",
+        "result": "pass",
+        "details": "0 errors, 0 warnings"
+      },
+      {
+        "test": "Cross-page navigation",
+        "result": "pass",
+        "details": "/ → /feedback/ken navigates correctly; topbar shows new tenure string (regression check that lib/employees.ts change flowed through to ChatTopbar correctly)"
+      },
+      {
+        "test": "Type integrity (tsc --noEmit)",
+        "result": "pass",
+        "details": "Exit 0; DraftActions.tsx onStartOver kept in Props (BA S1) so spread-prop callers still typecheck"
+      }
+    ],
+    "code_quality_findings": [],
+    "permissions_verification": {
+      "status": "pass",
+      "permissions_count": 0,
+      "validated_permissions": [],
+      "issues": []
+    },
+    "hardcode_scan_results": {
+      "files_scanned": 8,
+      "violations": [],
+      "summary": {
+        "critical": 0,
+        "major": 0,
+        "minor": 0
+      },
+      "notes": "Tailwind class strings (e.g., bg-blue-600, h-8 w-8, text-4xl) are NOT hardcode violations — they are design tokens per the project's Tailwind setup. Hardcoded text strings in the system prompt (META-RULES, harassment block, toast string) are required verbatim per spec Contract C (tier_1_external) — explicitly authorized by user. Hex code rgb(37,99,235) measured by getComputedStyle is the runtime expansion of the bg-blue-600 design token, not a hardcoded literal in source."
+    },
+    "standards_compliance": {
+      "checked": true,
+      "violations": [],
+      "notes": "feedbackforge CLAUDE.md does not document custom design rules beyond standard Tailwind + the 'use systemd not nohup' production server rule. QA did not start any ad-hoc server (used existing dev server on PID 458805 per orchestrator instruction). Dev's edits use existing Tailwind utilities and lucide-react icons consistently with the project's style."
+    },
+    "app_understanding_flow": {
+      "executed": true,
+      "core_flow_completed": true,
+      "steps_completed": 4,
+      "baseline_screenshots": [
+        "/root/feedbackforge/docs/dev/screenshots/dashboard-desktop-1440x900.png",
+        "/root/feedbackforge/docs/dev/screenshots/dashboard-mobile-390x844.png",
+        "/root/feedbackforge/docs/dev/screenshots/chat-desktop-1440x900.png",
+        "/root/feedbackforge/docs/dev/screenshots/chat-mobile-390x844.png"
+      ],
+      "errors_found_during_flow": [],
+      "app_not_running": false,
+      "notes": "Dev server (PID 458805) listens on localhost:3010 (not 3000 as the orchestrator note said — port 3000 is occupied by an unrelated docker-proxy). Verified by curl http://localhost:3010 → HTTP 200, <title>FeedbackCoach</title> present in the served HTML. Both the dashboard / and the chat /feedback/ken render at desktop 1440x900 and mobile 390x844. The /feedback/ken page stays on 'Starting session...' because .env.local ships with placeholder MINIMAX_AUTH_TOKEN (REPLACE_WITH_FULL_TOKEN_FROM_USER) — this is expected in dev environment and does not affect any of the 7 CHANGES being verified (CHANGE 4 verified statically via DraftActions.tsx file read; CHANGE 5 verified statically via lib/use-chat-page-actions.ts file read, both authorized by QA prompt)."
+    },
+    "ui_test_results": [
+      {
+        "scenario": "Dashboard renders FeedbackCoach branding (CHANGE 1) at desktop 1440x900",
+        "url": "http://localhost:3010/",
+        "status": "pass",
+        "reason": null,
+        "steps_performed": [
+          "browser_resize 1440x900",
+          "browser_navigate http://localhost:3010/",
+          "browser_snapshot (accessibility tree shows heading 'FeedbackCoach' level=1)",
+          "browser_evaluate getComputedStyle on h1 + header",
+          "browser_take_screenshot fullPage to dashboard-desktop-1440x900.png"
+        ],
+        "assertions": [
+          {"expected": "h1 textContent = 'FeedbackCoach'", "actual": "'FeedbackCoach'", "passed": true},
+          {"expected": "h1 font-size = 36px (text-4xl)", "actual": "36px", "passed": true},
+          {"expected": "h1 font-weight = 700 (bold)", "actual": "700", "passed": true},
+          {"expected": "header text-align = center", "actual": "center", "passed": true},
+          {"expected": "header padding/margin visibly larger than baseline mb-8 sm:mb-10", "actual": "pt=40px pb=40px mb=64px (3-4x larger)", "passed": true},
+          {"expected": "Browser tab title = 'FeedbackCoach'", "actual": "FeedbackCoach", "passed": true}
+        ],
+        "evidence": "/root/feedbackforge/docs/dev/screenshots/dashboard-desktop-1440x900.png",
+        "dynamic_verification": {
+          "before_screenshot": null,
+          "after_screenshot": "/root/feedbackforge/docs/dev/screenshots/dashboard-desktop-1440x900.png",
+          "user_visible_change_confirmed": true
+        }
+      },
+      {
+        "scenario": "Dashboard NC logo (CHANGE 2) at desktop",
+        "url": "http://localhost:3010/",
+        "status": "pass",
+        "reason": null,
+        "steps_performed": [
+          "browser_evaluate querySelector('[aria-label=\"NormalCompany\"]') + getBoundingClientRect + getComputedStyle"
+        ],
+        "assertions": [
+          {"expected": "NC div bbox 32x32px", "actual": "32x32px", "passed": true},
+          {"expected": "background = bg-blue-600 = rgb(37,99,235)", "actual": "rgb(37,99,235)", "passed": true},
+          {"expected": "color = white", "actual": "rgb(255,255,255)", "passed": true},
+          {"expected": "font-weight = 700 (bold)", "actual": "700", "passed": true},
+          {"expected": "border-radius = rounded-full (9999px)", "actual": "9999px", "passed": true},
+          {"expected": "NC.x < companyText.x (NC is to the LEFT)", "actual": "true (738.7 < 778.7)", "passed": true},
+          {"expected": "gap between NC and company = 8px (gap-2)", "actual": "8px", "passed": true},
+          {"expected": "vertically centered on the same row", "actual": "true (ncSameRowAsCompany=true)", "passed": true}
+        ],
+        "evidence": "/root/feedbackforge/docs/dev/screenshots/dashboard-desktop-1440x900.png",
+        "dynamic_verification": {
+          "before_screenshot": null,
+          "after_screenshot": "/root/feedbackforge/docs/dev/screenshots/dashboard-desktop-1440x900.png",
+          "user_visible_change_confirmed": true
+        }
+      },
+      {
+        "scenario": "Dashboard tenure + Briefcase (CHANGE 3) at desktop",
+        "url": "http://localhost:3010/",
+        "status": "pass",
+        "reason": null,
+        "steps_performed": [
+          "browser_evaluate querySelectorAll('main span') filter for 'at NormalCompany'",
+          "browser_evaluate querySelectorAll('main svg') filter for lucide-briefcase"
+        ],
+        "assertions": [
+          {"expected": "4 tenure spans with verbatim strings", "actual": "['1 year at NormalCompany','7 years at NormalCompany','5 years at NormalCompany','2 years at NormalCompany']", "passed": true},
+          {"expected": "tenure parent is <span> with inline-flex items-center gap-1 text-sm text-slate-500 (NOT a Badge)", "actual": "SPAN:inline-flex items-center gap-1 text-sm text-slate-500", "passed": true},
+          {"expected": "4 lucide-briefcase SVGs each 16x16px", "actual": "4 found, all 16x16", "passed": true},
+          {"expected": "Briefcase color = text-slate-500 = rgb(100,116,139)", "actual": "rgb(100,116,139)", "passed": true}
+        ],
+        "evidence": "/root/feedbackforge/docs/dev/screenshots/dashboard-desktop-1440x900.png",
+        "dynamic_verification": {
+          "before_screenshot": null,
+          "after_screenshot": "/root/feedbackforge/docs/dev/screenshots/dashboard-desktop-1440x900.png",
+          "user_visible_change_confirmed": true
+        }
+      },
+      {
+        "scenario": "Dashboard renders correctly at mobile 390x844",
+        "url": "http://localhost:3010/",
+        "status": "pass",
+        "reason": null,
+        "steps_performed": [
+          "browser_resize 390x844",
+          "browser_take_screenshot fullPage to dashboard-mobile-390x844.png",
+          "browser_evaluate to confirm NC still on its own row (ncOnSeparateRowFromH1=true on mobile)"
+        ],
+        "assertions": [
+          {"expected": "h1 36px bold visible", "actual": "36px / 700 / centered", "passed": true},
+          {"expected": "NC circle on its own row below h1 on mobile", "actual": "ncOnSeparateRowFromH1=true at 390x844", "passed": true},
+          {"expected": "all 4 cards stack vertically with briefcase + tenure", "actual": "visible in screenshot", "passed": true},
+          {"expected": "no console errors", "actual": "0 errors", "passed": true}
+        ],
+        "evidence": "/root/feedbackforge/docs/dev/screenshots/dashboard-mobile-390x844.png",
+        "dynamic_verification": {
+          "before_screenshot": null,
+          "after_screenshot": "/root/feedbackforge/docs/dev/screenshots/dashboard-mobile-390x844.png",
+          "user_visible_change_confirmed": true
+        }
+      },
+      {
+        "scenario": "Chat page /feedback/ken renders at desktop + mobile (regression check, no API)",
+        "url": "http://localhost:3010/feedback/ken",
+        "status": "pass",
+        "reason": null,
+        "steps_performed": [
+          "browser_navigate /feedback/ken",
+          "browser_take_screenshot fullPage at desktop 1440x900 → chat-desktop-1440x900.png",
+          "browser_resize 390x844",
+          "browser_take_screenshot fullPage → chat-mobile-390x844.png",
+          "browser_console_messages level=error"
+        ],
+        "assertions": [
+          {"expected": "Page renders without errors", "actual": "renders cleanly, 0 console errors", "passed": true},
+          {"expected": "Topbar shows new tenure string '1 year at NormalCompany'", "actual": "'Junior Social Media Manager · 1 year at NormalCompany · 25yo'", "passed": true},
+          {"expected": "Page title = 'FeedbackCoach' (not FeedbackForge)", "actual": "FeedbackCoach", "passed": true}
+        ],
+        "evidence": "/root/feedbackforge/docs/dev/screenshots/chat-desktop-1440x900.png + chat-mobile-390x844.png",
+        "dynamic_verification": {
+          "before_screenshot": null,
+          "after_screenshot": "/root/feedbackforge/docs/dev/screenshots/chat-desktop-1440x900.png",
+          "user_visible_change_confirmed": true
+        }
+      },
+      {
+        "scenario": "DraftActions 2-button render (CHANGE 4) — static markup verification",
+        "url": "n/a (static)",
+        "status": "pass",
+        "reason": "Live render of DraftActions requires drafted session state which requires working MiniMax API key. .env.local in dev ships with placeholder REPLACE_WITH_FULL_TOKEN_FROM_USER. QA prompt explicitly authorizes static markup verification: 'static verification of code wiring is sufficient (no need to drive the chat to a draft state)'. Verified components/DraftActions.tsx contains exactly 2 <Button> elements (Accept & Save + Refine Further), no Start Over button or rendered string.",
+        "steps_performed": [
+          "Read tool: components/DraftActions.tsx full content",
+          "Grep tool: 'Start Over' across app/ lib/ components/ → 1 hit (comment only) at DraftActions.tsx:12"
+        ],
+        "assertions": [
+          {"expected": "DraftActions.tsx has exactly 2 <Button> blocks", "actual": "L17-22 Accept & Save + L23-29 Refine Further (2 buttons total)", "passed": true},
+          {"expected": "No 'Start Over' rendered string anywhere", "actual": "1 grep hit, but only inside a code comment explaining the removal", "passed": true},
+          {"expected": "onStartOver removed from destructure but kept in Props for caller compatibility", "actual": "Props type at L8 keeps onStartOver; destructure at L14 only takes onAccept + onRefine", "passed": true}
+        ],
+        "evidence": "components/DraftActions.tsx file content + Grep results",
+        "dynamic_verification": {
+          "before_screenshot": null,
+          "after_screenshot": null,
+          "user_visible_change_confirmed": false,
+          "user_visible_change_skipped_reason": "API token missing in dev .env.local; static markup verification authorized by QA prompt"
+        }
+      }
+    ],
+    "generated_tests": [],
+    "all_findings": [
+      {
+        "severity": "minor",
+        "location": "app/page.tsx:7-28 (DashboardHeader function)",
+        "issue": "On desktop viewports (>= ~600px header width), the inner h1+sparkles inline-flex row and the NC+company inline-flex row visually collapse onto a single horizontal line because both children are display: inline-flex (which is inline-level). The result is the screenshot shows '⚡ FeedbackCoach NC NormalCompany — Marketing Team' on one row, followed by 'Logged in as Alex...' on a second row. On mobile they correctly stack into 3 separate rows. This is a layout quirk, not a spec violation — Section 5 only requires (a) NC on the LEFT of company text, (b) gap-2, (c) vertically centered, (d) entire header centered. All of those criteria pass. But a typical interpretation of 'centered header' might expect three separate centered rows even on desktop.",
+        "recommendation": "OPTIONAL polish (not required to pass): change the second inner div's class from `mt-2 inline-flex items-center justify-center gap-2 text-sm text-slate-500` to `mt-2 flex items-center justify-center gap-2 text-sm text-slate-500` (drop the `inline-` prefix). This forces it onto its own row at all widths. Since this is a polish suggestion and Section 5 does not mandate row stacking, the verdict remains PASS.",
+        "blocks_release": false
+      }
+    ],
+    "summary": {
+      "critical_issues": 0,
+      "major_issues": 0,
+      "minor_issues": 1,
+      "total_findings": 1,
+      "release_recommendation": "approve"
+    },
+    "self_verification": {
+      "claims_total": 18,
+      "claims_with_evidence": 18,
+      "claims_superficial": 0,
+      "superficial_details": [],
+      "confidence": "high",
+      "notes": "All 14 R-items + AC8 + 4 regression checks are backed by concrete evidence: getComputedStyle measurements, file content reads, grep counts, tsc exit code, or screenshots. The 1 minor finding is flagged with full context (not blocking)."
+    },
+    "live_verification_setup_attempt": {
+      "attempted_create_via_ui": false,
+      "ui_action_taken": "Navigated to /feedback/ken at desktop and mobile viewports; observed that the chat page shows 'Starting session...' indefinitely because POST /api/chat fails (no valid MiniMax token in .env.local).",
+      "result": "Static verification of CHANGES 4 + 5 was authorized by QA prompt: 'Static verification of code wiring is sufficient (no need to drive the chat to a draft state)' for CHANGE 5; for CHANGE 4 the prompt says 'you can navigate to /feedback/<some-id> to inspect, even without driving the chat to a draft state, the markup wiring is what matters'. So creating a drafted session was not required.",
+      "screenshots_of_attempt": [
+        "/root/feedbackforge/docs/dev/screenshots/chat-desktop-1440x900.png",
+        "/root/feedbackforge/docs/dev/screenshots/chat-mobile-390x844.png"
+      ]
+    }
+  },
+  "iteration_needed": false,
+  "refined_context": null
+}

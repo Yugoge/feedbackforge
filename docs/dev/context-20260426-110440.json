@@ -1,0 +1,273 @@
+{
+  "request_id": "dev-20260426-110440",
+  "timestamp": "2026-04-26T11:04:40+00:00",
+  "requirement": {
+    "original": "Apply the 7 prescribed changes from spec Section 5 — FeedbackForge → FeedbackCoach rebrand and UI/prompt updates.",
+    "clarified": "Apply the 7 numbered CHANGES quoted verbatim in Section 5 of /root/feedbackforge/docs/dev/specs/spec-20260426-102329.md: (1) rebrand FeedbackForge→FeedbackCoach in 4 in-app source files + bigger/centered/padded header on dashboard; (2) add 32px circular bg-blue-600 NC logo to the LEFT of the company-team text on the dashboard; (3) expand each employee's tenure to '<N> year[s] at NormalCompany' AND replace the tenure Badge with plain text + lucide Briefcase icon (text-slate-500); (4) remove the Start Over button from DraftActions; (5) on Accept & Save, clipboard.writeText the last assistant message, swap toast to the new 'Copied to clipboard! …' string, push to / after 3000ms; (6) insert META-RULES block in lib/prompts.ts immediately before CONSTRAINTS; (7) replace the existing Harassment/discrimination/safety SPECIAL CASES line with the verbatim multi-line redirect-to-HR + conclude block.",
+    "what": "Apply 7 prescribed verbatim text/markup edits across 8 source files; no architectural change.",
+    "why": "User wants the brand renamed, sensitive-case handling tightened, leakage of system instructions blocked, and the Accept & Save flow upgraded to copy the actual draft to clipboard rather than just showing a toast.",
+    "where": [
+      "app/page.tsx",
+      "app/layout.tsx",
+      "components/EmployeeCard.tsx",
+      "components/DraftActions.tsx",
+      "components/ChatPageBody.tsx",
+      "lib/employees.ts",
+      "lib/use-chat-page-actions.ts",
+      "lib/prompts.ts"
+    ],
+    "scope": {
+      "included": [
+        "Rename all 4 in-app source occurrences of 'FeedbackForge' to 'FeedbackCoach' (app/page.tsx h1, app/layout.tsx metadata title, lib/prompts.ts comment, lib/prompts.ts system prompt opening)",
+        "Bigger (text-4xl) bold centered header with increased margin/padding on dashboard",
+        "Inline 32px circular bg-blue-600 white-bold 'NC' div to LEFT of company-team text, gap-2, vertically centered",
+        "Expand 4 tenure strings in lib/employees.ts to '<N> year[s] at NormalCompany'",
+        "Replace tenure Badge in components/EmployeeCard.tsx with plain text + Briefcase icon (text-slate-500); keep age Badge",
+        "Delete Start Over button JSX from components/DraftActions.tsx",
+        "Modify onAccept in lib/use-chat-page-actions.ts to call navigator.clipboard.writeText on the last assistant message content, set the new toast string, and navigate after 3000ms; thread session.messages through ChatPageBody → useChatPageActions",
+        "Insert META-RULES block (verbatim Section 5 lines 165-176) immediately before CONSTRAINTS: in lib/prompts.ts",
+        "Replace existing harassment line in SPECIAL CASES with verbatim Section 5 lines 183-193 redirect-to-HR + conclude block"
+      ],
+      "excluded": [
+        "README.md, CLAUDE.md, package.json (do not contain 'FeedbackForge' currently and are infrastructure)",
+        "Project directory name /root/feedbackforge (per Section 1 — infrastructure, not user-facing)",
+        "docs/dev/specs/** and .claude/** (spec history / workflow state — must not be edited)",
+        "Any other parts of lib/prompts.ts beyond CHANGES 1, 6, 7",
+        "Existing Sparkles icon usage on dashboard header (kept)",
+        "Refine Further and Accept & Save button styling/colors (kept)",
+        "Chat topbar tenure rendering (kept — will display the longer string)",
+        "API route, MiniMax integration, model config (untouched)"
+      ]
+    },
+    "success_criteria": [
+      "Grep 'FeedbackForge' in app/, components/, lib/ returns 0 hits",
+      "Grep 'FeedbackCoach' in app/, components/, lib/ returns at least 4 hits",
+      "Dashboard h1 computed font-size ≈ 36px (text-4xl), font-weight 700, parent has horizontal centering (text-center or justify-center)",
+      "Header outer margin/padding visibly larger than baseline (mb-8 sm:mb-10)",
+      "Dashboard renders a 32×32px bg-blue-600 circular div with white bold 'NC' immediately before the company-team text, separated by gap-2 (8px)",
+      "lib/employees.ts tenure values exactly match: '1 year at NormalCompany', '7 years at NormalCompany', '5 years at NormalCompany', '2 years at NormalCompany'",
+      "components/EmployeeCard.tsx renders Briefcase icon + plain tenure text (no <Badge> for tenure); age Badge still present",
+      "components/DraftActions.tsx renders exactly 2 buttons; 'Start Over' string absent",
+      "Clicking Accept & Save calls navigator.clipboard.writeText with the last assistant message content, shows toast 'Copied to clipboard! Both the feedback draft and delivery guidance are ready to paste into your notes.', navigates to / after 3000ms",
+      "lib/prompts.ts contains the verbatim META-RULES block immediately before 'CONSTRAINTS:'",
+      "lib/prompts.ts SPECIAL CASES block contains the verbatim multi-line redirect-to-HR replacement; old single-line harassment string removed",
+      "npm run build (or tsc --noEmit + lint) passes with zero errors",
+      "Git diff confined to the 8 affected source files"
+    ],
+    "constraints": [
+      "Verbatim copy required for: META-RULES block (CHANGE 6), harassment replacement block (CHANGE 7), toast string (CHANGE 5), all 4 tenure strings (CHANGE 3a)",
+      "No new dependencies (lucide-react Briefcase already available)",
+      "No new files",
+      "Do not modify other parts of the code (user's explicit constraint)",
+      "Must not modify hooks, settings.json, or any infrastructure",
+      "Production restart (systemctl) only if user explicitly requests live verification — local dev/build is sufficient"
+    ]
+  },
+  "root_cause_analysis": {
+    "symptom": "Not applicable — this is a feature/edit bundle, not a bug. The user has issued 7 prescribed changes verbatim.",
+    "root_cause": "N/A — feature bundle from user spec, no underlying defect.",
+    "root_cause_commit": "N/A",
+    "why_introduced": "N/A",
+    "why_problematic": "N/A",
+    "timeline": "N/A",
+    "affected_files": [
+      "app/page.tsx",
+      "app/layout.tsx",
+      "components/EmployeeCard.tsx",
+      "components/DraftActions.tsx",
+      "components/ChatPageBody.tsx",
+      "lib/employees.ts",
+      "lib/use-chat-page-actions.ts",
+      "lib/prompts.ts"
+    ],
+    "evidence_type": "observed",
+    "observations": [
+      "app/page.tsx:14 — h1 currently reads 'FeedbackForge' with className 'text-2xl font-bold text-slate-900' (observed: Read tool)",
+      "app/page.tsx:11-22 — header has mb-8 sm:mb-10, no centering, gap-2 horizontal layout (observed: Read tool)",
+      "app/page.tsx:16-18 — 'NormalCompany — Marketing Team' rendered in <p> with no logo (observed: Read tool)",
+      "components/EmployeeCard.tsx:38 — tenure rendered via <Badge variant=\"secondary\">{employee.tenure}</Badge> (observed: Read tool)",
+      "lib/employees.ts:11,21,31,41 — tenure values are 1 year / 7 years / 5 years / 2 years (observed: Read tool)",
+      "components/DraftActions.tsx:30-36 — Start Over Button rendered with onStartOver handler (observed: Read tool)",
+      "lib/use-chat-page-actions.ts:17-20 — onAccept calls setToast('Draft ready — copy it before your 1:1') then router.push('/') after 2000ms; no clipboard, no message access (observed: Read tool)",
+      "lib/prompts.ts:3,6 — comment + system prompt opening reference 'FeedbackForge' (observed: Read tool + Grep)",
+      "lib/prompts.ts:91-92 — current harassment line is a single line: '- Harassment/discrimination/safety: Do NOT draft feedback. Flag for HR escalation.' (observed: Read tool)",
+      "lib/prompts.ts:98 — CONSTRAINTS: line begins; META-RULES insertion point is between L96 and L98 (observed: Read tool)",
+      "app/layout.tsx:8 — metadata title is 'FeedbackForge' (observed: Read tool)",
+      "lib/types.ts:17-22 — Message type is { id, role: 'user' | 'assistant', content: string, timestamp: Date } (observed: Read tool)",
+      "components/ChatPageBody.tsx:29,56,58,91 — accesses session.messages directly via session.messages.length and messages[messages.length - 1].role; useChatPageActions is currently called with {sendMessage, resetSession, setToast} only (observed: Read tool)",
+      "Full-repo grep for 'FeedbackForge' returns exactly 4 in-app source hits (app/page.tsx, app/layout.tsx, lib/prompts.ts:3, lib/prompts.ts:6); other hits are in docs/dev/specs/, .claude/specs/, and the spec file itself — not user-facing source (observed: Grep across /root/feedbackforge)"
+    ],
+    "diagnosis_completeness": "complete",
+    "complaint_location_keywords": [
+      "FeedbackForge",
+      "FeedbackCoach",
+      "NormalCompany",
+      "NC logo",
+      "tenure",
+      "Briefcase",
+      "Start Over",
+      "Accept & Save",
+      "navigator.clipboard.writeText",
+      "Copied to clipboard",
+      "META-RULES",
+      "CONSTRAINTS",
+      "SPECIAL CASES",
+      "Harassment"
+    ],
+    "localization_evidence": "Read tool inspected each file PM Section 1 enumerated; Grep across /root/feedbackforge confirmed FeedbackForge appears in exactly 4 in-app source files plus expected spec/doc artifacts. Section 5 prescribes literal text values; no runtime reproduction needed for static-text edits. CHANGE 5 access path verified via Read of components/ChatPageBody.tsx (uses session.messages) + lib/types.ts (Message.content shape) + components/ChatPageBody.tsx:29 pattern (messages[messages.length - 1]).",
+    "located_source": "8 source files: app/page.tsx, app/layout.tsx, components/EmployeeCard.tsx, components/DraftActions.tsx, components/ChatPageBody.tsx, lib/employees.ts, lib/use-chat-page-actions.ts, lib/prompts.ts",
+    "localization_blocked": null,
+    "git_bisect_result": {
+      "triggered": false,
+      "suspect_commit": null,
+      "commit_message": null,
+      "confirmed_by": null,
+      "bisect_blocked": null,
+      "reproducibility_verified": null
+    }
+  },
+  "diagnosis_layer": "L1+L3 (cosmetic/text rebrand for CHANGES 1-3 + 6-7; light L4 logic touch in CHANGE 5 for clipboard branch + CHANGE 4 JSX removal)",
+  "requirements_decomposition": [
+    {"id": "R1", "source_phrase": "Change the app name from \"FeedbackForge\" to \"FeedbackCoach\"", "acceptance_criterion": "All 4 in-app source occurrences read 'FeedbackCoach'; grep 'FeedbackForge' returns 0 results in app/, components/, lib/."},
+    {"id": "R2", "source_phrase": "Make the title significantly bigger (text-4xl) and bold", "acceptance_criterion": "Dashboard <h1> className contains text-4xl AND font-bold."},
+    {"id": "R3", "source_phrase": "Center the entire header section", "acceptance_criterion": "<header> on app/page.tsx is horizontally centered (text-center or flex+justify-center)."},
+    {"id": "R4", "source_phrase": "Increase the margin/padding around the header", "acceptance_criterion": "Margin/padding around the <header> visibly larger than baseline mb-8 sm:mb-10."},
+    {"id": "R5", "source_phrase": "next to the \"NormalCompany — Marketing Team\" text, add a circular NC logo on the LEFT side ... 32px size, bg-blue-600, white bold text \"NC\" centered ... rounded-full ... inline-flex with the company text, gap-2 ... Vertically aligned center", "acceptance_criterion": "A <div> with classes h-8 w-8 bg-blue-600 rounded-full text-white font-bold (or font-semibold) renders 'NC' centered, immediately to the LEFT of the company-team text, parent inline-flex items-center gap-2."},
+    {"id": "R6", "source_phrase": "Ken: \"1 year at NormalCompany\" / Jenny: \"7 years at NormalCompany\" / John: \"5 years at NormalCompany\" / Clara: \"2 years at NormalCompany\"", "acceptance_criterion": "lib/employees.ts tenure values match exactly (case + punctuation + 'at NormalCompany' suffix)."},
+    {"id": "R7", "source_phrase": "display this tenure text directly without a badge wrapper, with a small briefcase icon (Briefcase from lucide-react) next to it in slate-500 color", "acceptance_criterion": "components/EmployeeCard.tsx renders Briefcase icon (className includes text-slate-500) + plain tenure text; no <Badge> wraps the tenure; age Badge still present."},
+    {"id": "R8", "source_phrase": "remove the \"Start Over\" action button entirely from the action buttons section. Keep only \"Accept & Save\" and \"Refine Further\"", "acceptance_criterion": "components/DraftActions.tsx renders exactly 2 buttons; the 'Start Over' string and its <Button> are gone."},
+    {"id": "R9", "source_phrase": "copy the COMPLETE final assistant message ... to the clipboard using navigator.clipboard.writeText()", "acceptance_criterion": "onAccept calls navigator.clipboard.writeText with the .content of the last role==='assistant' message in session.messages."},
+    {"id": "R10", "source_phrase": "Show a success message: \"Copied to clipboard! Both the feedback draft and delivery guidance are ready to paste into your notes.\"", "acceptance_criterion": "Toast string equals exactly 'Copied to clipboard! Both the feedback draft and delivery guidance are ready to paste into your notes.'"},
+    {"id": "R11", "source_phrase": "After 3 seconds, navigate back to dashboard", "acceptance_criterion": "setTimeout(() => router.push('/'), 3000) (or equivalent 3000ms)."},
+    {"id": "R12", "source_phrase": "add this section near the end of the system prompt, before the CONSTRAINTS block: META-RULES (NEVER VIOLATE) ...", "acceptance_criterion": "lib/prompts.ts contains the verbatim META-RULES block (Section 5 lines 165-176), positioned immediately before the line 'CONSTRAINTS:'."},
+    {"id": "R13", "source_phrase": "find the SPECIAL CASES section and replace the \"Harassment/discrimination/safety\" handling with this exact text", "acceptance_criterion": "Old line '- Harassment/discrimination/safety: Do NOT draft feedback. Flag for HR escalation.' is gone; verbatim Section 5 lines 183-193 block (containing 'End your message as a CONCLUSION', 'do NOT ask any follow-up questions', 'return to the dashboard') is in its place."},
+    {"id": "R14", "source_phrase": "Do not modify other parts of the code", "acceptance_criterion": "Git diff confined to the 8 affected source files; no other source files touched."}
+  ],
+  "component_chain": [
+    {"file": "app/page.tsx", "line_range": "1-34", "role": "Dashboard root — renders header + employee grid", "imports_from": ["lucide-react (Sparkles)", "@/lib/employees", "@/components/EmployeeCard"], "evidence": "Read /root/feedbackforge/app/page.tsx", "verified_via": "Read"},
+    {"file": "app/layout.tsx", "line_range": "1-26", "role": "Root layout + metadata.title for browser tab", "imports_from": ["next", "next/font/google"], "evidence": "Read /root/feedbackforge/app/layout.tsx", "verified_via": "Read"},
+    {"file": "components/EmployeeCard.tsx", "line_range": "1-66", "role": "Per-employee dashboard card; currently renders tenure via Badge at L38", "imports_from": ["next/navigation", "@/lib/types", "@/components/ui/card", "@/components/ui/avatar", "@/components/ui/badge", "@/components/ui/button"], "evidence": "Read /root/feedbackforge/components/EmployeeCard.tsx; L38 'Badge variant=\"secondary\"{employee.tenure}'", "verified_via": "Read"},
+    {"file": "components/DraftActions.tsx", "line_range": "1-39", "role": "Renders Accept & Save + Refine Further + Start Over buttons under the assistant draft", "imports_from": ["@/components/ui/button"], "evidence": "Read /root/feedbackforge/components/DraftActions.tsx; L30-36 Start Over Button block", "verified_via": "Read"},
+    {"file": "components/ChatPageBody.tsx", "line_range": "1-112", "role": "Top-level chat page body; wires session + actions; passes session.messages to ChatTranscript", "imports_from": ["next/navigation", "@/lib/types", "@/lib/use-chat-session", "@/lib/use-chat-page-actions", "@/components/ChatTopbar", "@/components/ChatInput", "@/components/ChatTranscript", "@/components/EmptyState"], "evidence": "Read /root/feedbackforge/components/ChatPageBody.tsx; L92-96 useChatPageActions({sendMessage, resetSession, setToast}) — must extend with messages", "verified_via": "Read"},
+    {"file": "lib/employees.ts", "line_range": "1-51", "role": "Hardcoded employee fixtures; tenure strings are L11, L21, L31, L41", "imports_from": ["@/lib/types"], "evidence": "Read /root/feedbackforge/lib/employees.ts", "verified_via": "Read"},
+    {"file": "lib/use-chat-page-actions.ts", "line_range": "1-32", "role": "Hook providing onAccept / onRefine / onStartOver handlers", "imports_from": ["next/navigation"], "evidence": "Read /root/feedbackforge/lib/use-chat-page-actions.ts; L17-20 onAccept implementation", "verified_via": "Read"},
+    {"file": "lib/prompts.ts", "line_range": "1-113", "role": "System prompt template + builder; contains brand name (L3 comment, L6 opening), SPECIAL CASES (L87-96), CONSTRAINTS (L98-104)", "imports_from": ["@/lib/types"], "evidence": "Read /root/feedbackforge/lib/prompts.ts; Grep confirmed FeedbackForge at L3 and L6", "verified_via": "Read+Grep"},
+    {"file": "lib/types.ts", "line_range": "17-22", "role": "Defines Message type with .role and .content — contract for CHANGE 5 clipboard read", "imports_from": ["leaf"], "evidence": "Read /root/feedbackforge/lib/types.ts L17-22", "verified_via": "Read"}
+  ],
+  "pre_existing_guards": [
+    {"file": "components/ChatPageBody.tsx", "line": 26, "type": "if", "code_snippet": "function lastIsDraft(messages: Message[], status: string): boolean { if (status !== 'drafted') return false; if (messages.length === 0) return false; return messages[messages.length - 1].role === 'assistant'; }", "purpose": "Guards rendering of DraftActions — only shows them when the last message is from the assistant in 'drafted' state. CHANGE 5's reliance on the last assistant message is therefore SAFE because Accept & Save is only clickable when this guard already passes.", "removal_authorized": false},
+    {"file": "components/EmployeeCard.tsx", "line": 39, "type": "type-guard", "code_snippet": "<Badge variant=\"secondary\">{employee.age}yo</Badge>", "purpose": "Age badge — must remain after CHANGE 3 (only the tenure Badge is replaced).", "removal_authorized": false},
+    {"file": "components/DraftActions.tsx", "line": 17, "type": "type-guard", "code_snippet": "<Button onClick={onAccept} className=\"min-h-11 bg-green-600 ...\">Accept &amp; Save</Button>", "purpose": "Accept & Save button — must remain (CHANGE 4 only removes Start Over).", "removal_authorized": false},
+    {"file": "components/DraftActions.tsx", "line": 23, "type": "type-guard", "code_snippet": "<Button onClick={onRefine} variant=\"outline\" className=\"... border-blue-600 text-blue-600\">Refine Further</Button>", "purpose": "Refine Further button — must remain.", "removal_authorized": false},
+    {"file": "lib/prompts.ts", "line": 87, "type": "structural-section", "code_snippet": "SPECIAL CASES:", "purpose": "Section header — must remain; CHANGE 7 only modifies the harassment bullet WITHIN this section.", "removal_authorized": false},
+    {"file": "lib/prompts.ts", "line": 98, "type": "structural-section", "code_snippet": "CONSTRAINTS:", "purpose": "Section header — META-RULES insertion goes immediately ABOVE this; CONSTRAINTS itself unchanged.", "removal_authorized": false}
+  ],
+  "regression_investigation_checklist": null,
+  "setup": {
+    "viewport": "1440x900 desktop AND 390x844 mobile (both required for QA dashboard + chat screenshots)",
+    "theme": "light",
+    "locale": "en",
+    "auth_state": "logged-in (single hardcoded manager 'Alex' — no real auth)",
+    "data_state": "with-data (4 hardcoded employees); CHANGE 5 also requires a 'drafted' chat session (assistant has emitted Feedback Draft + Delivery Guidance)",
+    "browser": "Chrome desktop + Chrome/Safari mobile emulation",
+    "url_path": "/ for CHANGES 1, 2, 3; /feedback/[id] for CHANGES 4, 5; CHANGES 6, 7 are server-side prompt edits (verified via file Read + optionally a chat trigger for CHANGE 7)"
+  },
+  "evidence": {
+    "observed": "User issued the verbatim 7 numbered CHANGES in Section 5 of /root/feedbackforge/docs/dev/specs/spec-20260426-102329.md. No bug symptom — feature/edit bundle.",
+    "measured": {
+      "value": "8 source files contain the existing strings/markup that the 7 CHANGES target. Grep 'FeedbackForge' across /root/feedbackforge returns exactly 4 in-app source hits: app/page.tsx:14, app/layout.tsx:8, lib/prompts.ts:3, lib/prompts.ts:6.",
+      "location": "app/page.tsx:11-22, app/layout.tsx:8, components/EmployeeCard.tsx:38, components/DraftActions.tsx:30-36, components/ChatPageBody.tsx:92-96, lib/employees.ts:11/21/31/41, lib/use-chat-page-actions.ts:17-20, lib/prompts.ts:3/6/87-96/98"
+    },
+    "expected": {
+      "value": "Post-edit state per Section 5 verbatim: brand 'FeedbackCoach', text-4xl bold centered header with extra padding, 32px circular bg-blue-600 NC logo, expanded tenure strings + Briefcase + plain text, 2 action buttons (no Start Over), clipboard.writeText + new toast + 3000ms delay, META-RULES block before CONSTRAINTS, SPECIAL CASES harassment line replaced with redirect-to-HR + conclude block.",
+      "source": "/root/feedbackforge/docs/dev/specs/spec-20260426-102329.md Section 5 lines 116-195"
+    },
+    "gap": "7 distinct edits across 8 source files; all values are verbatim-prescribed, no design discretion."
+  },
+  "scope_expansion": {
+    "search_pattern": "FeedbackForge",
+    "search_scope": "/root/feedbackforge (excluding node_modules, .git)",
+    "user_reported": ["app/page.tsx", "lib/prompts.ts"],
+    "additional_found": ["app/layout.tsx (metadata title)", "lib/prompts.ts:3 (code comment in addition to L6 prompt body)"],
+    "all_occurrences": [
+      "app/page.tsx:14",
+      "app/layout.tsx:8",
+      "lib/prompts.ts:3",
+      "lib/prompts.ts:6"
+    ]
+  },
+  "reference_source": {
+    "tier": "tier_1_external",
+    "description": "User's own Section 5 of /root/feedbackforge/docs/dev/specs/spec-20260426-102329.md — verbatim values for all CHANGES; this is the authoritative spec.",
+    "url_or_location": "/root/feedbackforge/docs/dev/specs/spec-20260426-102329.md (lines 116-195)",
+    "copy_allowed": true
+  },
+  "prior_attempts": {
+    "triggered": false,
+    "trigger_source": null,
+    "attempts": [],
+    "novelty_check": {
+      "this_attempt_layer": "L1+L3 (cosmetic + data) with light L4 (clipboard branch in CHANGE 5)",
+      "differs_from_all_priors": true,
+      "rationale": "First attempt at this requirement bundle; orchestrator metadata existing_specs is empty, no retry phrase, no prior FeedbackCoach-rename commits."
+    }
+  },
+  "context": {
+    "codebase_state": "main branch, working tree clean except for INDEX.md (modified) and .claude/, docs/ (untracked) per gitStatus",
+    "recent_commits": [
+      "0f5c62f CLAUDE.md: add operational rule for the production server",
+      "c6c2513 README: project overview + local-deploy + API config",
+      "ace1dc6 Apply cycle 2 fixes: Tailwind lib/ glob + chat EmptyState gate",
+      "10f3f83 Initial bootstrap (Next.js 14 + MiniMax Anthropic)"
+    ],
+    "file_contents": {
+      "verified": [
+        "/root/feedbackforge/app/page.tsx",
+        "/root/feedbackforge/app/layout.tsx",
+        "/root/feedbackforge/app/feedback/[id]/page.tsx",
+        "/root/feedbackforge/components/EmployeeCard.tsx",
+        "/root/feedbackforge/components/DraftActions.tsx",
+        "/root/feedbackforge/components/ChatPageBody.tsx",
+        "/root/feedbackforge/lib/employees.ts",
+        "/root/feedbackforge/lib/use-chat-page-actions.ts",
+        "/root/feedbackforge/lib/use-chat-session.ts",
+        "/root/feedbackforge/lib/types.ts",
+        "/root/feedbackforge/lib/prompts.ts"
+      ]
+    },
+    "dependencies": {
+      "lucide-react": "0.469.0 (already installed; exports Briefcase — no install needed)",
+      "@anthropic-ai/sdk": "0.30.1 (untouched)",
+      "next": "14.2.35 (untouched)",
+      "tailwindcss": "3.4.17 (untouched)"
+    },
+    "environment": {
+      "production_url": "https://forge.life-ai.app -> localhost:3025 via cloudflared-lifeai (NOT to be hit during dev/test)",
+      "production_unit": "/etc/systemd/system/feedbackforge.service (use sudo systemctl restart feedbackforge ONLY if user requests live verification)",
+      "local_dev": "cd /root/feedbackforge && npm run dev (foreground only — never nohup)",
+      "envs": ".env.local has MINIMAX_AUTH_TOKEN; not required for static-text edits but required if QA exercises the chat for CHANGE 7 trigger"
+    }
+  },
+  "development_approach": {
+    "strategy": "Apply each of the 7 CHANGES as the smallest possible diff in the smallest set of files. Order suggested: (1) lib/employees.ts tenure strings; (2) components/EmployeeCard.tsx Briefcase + drop tenure Badge; (3) app/page.tsx header rebrand + size + center + padding + NC logo; (4) app/layout.tsx metadata title rename; (5) components/DraftActions.tsx delete Start Over Button; (6) lib/use-chat-page-actions.ts onAccept rewrite (extend signature to accept messages); (7) components/ChatPageBody.tsx pass session.messages into useChatPageActions; (8) lib/prompts.ts comment + opening rename, META-RULES insertion, harassment-line replacement. Run `npm run lint && npx tsc --noEmit` after each chunk; final `npm run build` once all 7 done.",
+    "files_to_create": [],
+    "files_to_modify": [
+      "app/page.tsx",
+      "app/layout.tsx",
+      "components/EmployeeCard.tsx",
+      "components/DraftActions.tsx",
+      "components/ChatPageBody.tsx",
+      "lib/employees.ts",
+      "lib/use-chat-page-actions.ts",
+      "lib/prompts.ts"
+    ],
+    "validation_approach": "QA: (1) build + typecheck pass; (2) Playwright at 1440x900 + 390x844 — screenshot dashboard, assert h1 text 'FeedbackCoach', assert NC circle bounding box ~32px LEFT of company text, assert 4 cards each show Briefcase icon + 'N year[s] at NormalCompany'; (3) Playwright navigate to /feedback/ken, drive a chat to drafted state, assert exactly 2 action buttons, click Accept & Save, assert clipboard contains the assistant message text (use grantPermissions clipboard-read), assert toast text exact match, assert navigation to / after ~3000ms; (4) Read lib/prompts.ts post-edit and grep for 'META-RULES' (must be above 'CONSTRAINTS:') and 'End your message as a CONCLUSION' (in SPECIAL CASES); (5) Optional CHANGE 7 runtime trigger: chat 'I think Ken is being harassed', assert response does not ask follow-up questions and ends as a conclusion. Local dev/build is sufficient — production restart only if user requests live verification."
+  },
+  "standards_to_enforce": {
+    "no_hardcoded_values": true,
+    "yaml_frontmatter_description_only": true,
+    "integer_step_numbering": true,
+    "meaningful_naming": true,
+    "git_root_cause_reference": true
+  }
+}

@@ -34,3 +34,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# claude code orchestration (transient per-session state)
+/.claude/
+
+# playwright mcp session artifacts
+/.playwright-mcp/
+
+# stray screenshots in repo root (real ones live in docs/dev/screenshots/)
+/qa-cycle*-*.png
