@@ -28,7 +28,7 @@ export const employees: Employee[] = [
     name: "John",
     age: 32,
     role: "Senior Marketing Manager",
-    tenure: "5 years",
+    tenure: "5 years at NormalCompany",
     department: "Marketing",
     avatarColor: "bg-green-500",
     description: "Reliable performer, strong client relationships",
