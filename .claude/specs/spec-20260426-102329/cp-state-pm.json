@@ -1,0 +1,37 @@
+{
+  "spec_id": "spec-20260426-102329",
+  "agent_type": "pm",
+  "instance_id": null,
+  "agent_id": "pm-1",
+  "is_running": true,
+  "checked_in_at": "2026-04-26T10:41:16Z",
+  "checked_out_at": null,
+  "checkpoints": [
+    {
+      "id": "cp-01",
+      "action": "Read pm.md view and confirm 7-CHANGE scope is well-defined",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    },
+    {
+      "id": "cp-02",
+      "action": "Write triage.json ordering CHANGEs (suggested: CHANGE 6-7 prompts first to de-risk regressions, then UI 1-5)",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    },
+    {
+      "id": "cp-03",
+      "action": "Populate Section 8 (Attention Notes) after retro with traps observed (e.g., file path vs component path mismatches)",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    }
+  ],
+  "terminal_artifact": {
+    "path": "docs/dev/triage.json",
+    "exists": false,
+    "validated_at": null
+  }
+}

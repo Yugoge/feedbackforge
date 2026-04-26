@@ -1,0 +1,79 @@
+{
+  "spec_id": "spec-20260426-102329",
+  "agent_type": "qa",
+  "instance_id": null,
+  "agent_id": "qa-1",
+  "is_running": true,
+  "checked_in_at": "2026-04-26T10:41:16Z",
+  "checked_out_at": null,
+  "checkpoints": [
+    {
+      "id": "cp-01",
+      "action": "Read qa.md view and enumerate 7 acceptance criteria from Section 5",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    },
+    {
+      "id": "cp-02",
+      "action": "Verify CHANGE 1: header centered, text-4xl, FeedbackCoach name everywhere",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    },
+    {
+      "id": "cp-03",
+      "action": "Verify CHANGE 2: NC logo div with bg-blue-600, rounded-full, 32px size, left of NormalCompany text",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    },
+    {
+      "id": "cp-04",
+      "action": "Verify CHANGE 3: tenure strings updated AND rendered with Briefcase icon, no Badge wrapper",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    },
+    {
+      "id": "cp-05",
+      "action": "Verify CHANGE 4: Start Over button gone, only Accept & Save and Refine Further remain",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    },
+    {
+      "id": "cp-06",
+      "action": "Verify CHANGE 5: clipboard write fires + correct toast text + 3s delay",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    },
+    {
+      "id": "cp-07",
+      "action": "Verify CHANGE 6+7: META-RULES block inserted before CONSTRAINTS and SPECIAL CASES harassment line replaced verbatim",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    },
+    {
+      "id": "cp-08",
+      "action": "Populate Section 4 of monolith with measured values (computed CSS, screenshot paths, console output)",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    },
+    {
+      "id": "cp-09",
+      "action": "Write docs/dev/qa-report-20260426.json with verdict=pass|fail|warning",
+      "state": "pending",
+      "waived_reason": null,
+      "updated_at": "2026-04-26T10:41:45Z"
+    }
+  ],
+  "terminal_artifact": {
+    "path": "docs/dev/qa-report.json",
+    "exists": false,
+    "validated_at": null
+  }
+}
