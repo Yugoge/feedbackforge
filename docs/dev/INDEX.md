@@ -1,7 +1,7 @@
 # dev
 
-*Last updated: 2026-04-26T12:37:15Z*
-**Total entries**: 17
+*Last updated: 2026-04-26T12:39:49Z*
+**Total entries**: 19
 **Convention**: kebab
 
 ## Tree
@@ -17,11 +17,13 @@ dev/
 │   │   └── views/
 │   └── `spec-20260426-102329.md` - Spec: FeedbackForge → FeedbackCoach rebrand + 7 UI/prompt changes
 ├── `ba-qa-report-20260426-110440.json` - json config
+├── `ba-qa-report-20260426-123337.json` - json config
 ├── `ba-spec-20260426-110440.md` - BA Specification: FeedbackForge → FeedbackCoach rebrand + 7 prescribed UI/prompt changes
 ├── `ba-spec-20260426-123337.md` - BA Specification: Stack DashboardHeader rows vertically
 ├── `close-report-20260426-110440.md` - Close Debate Report
 ├── `completion-20260426-110440.md` - Development Completion Report
 ├── `context-20260426-110440.json` - json config
+├── `context-20260426-123337.json` - json config
 ├── `dev-report-20260426-110440.json` - json config
 └── `qa-report-20260426-110440.json` - json config
 ```
