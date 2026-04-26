@@ -1,6 +1,6 @@
 # components
 
-*Last updated: 2026-04-26T11:18:50Z*
+*Last updated: 2026-04-26T11:19:12Z*
 **Total entries**: 18
 **Convention**: kebab
 
