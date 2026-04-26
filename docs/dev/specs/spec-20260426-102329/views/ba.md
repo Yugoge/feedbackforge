@@ -7,6 +7,12 @@
 
 ---
 
+## Role Mandate
+
+> <!-- WHO WRITES: BA (on first analysis) -->
+
+---
+
 ## Section 1: Before — analysis framing
 
 **Stack confirmed**: Next.js 14 App Router, TypeScript, Tailwind, `lucide-react@0.469.0` (already a dep — no install needed).
