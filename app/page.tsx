@@ -7,11 +7,11 @@ import { EmployeeCard } from "@/components/EmployeeCard";
 function DashboardHeader() {
   return (
     <header className="mb-12 py-8 text-center sm:mb-16 sm:py-10">
-      <div className="inline-flex items-center justify-center gap-2">
+      <div className="flex items-center justify-center gap-2">
         <Sparkles className="h-6 w-6 text-blue-600" aria-hidden="true" />
         <h1 className="text-4xl font-bold text-slate-900">FeedbackCoach</h1>
       </div>
-      <div className="mt-2 inline-flex items-center justify-center gap-2 text-sm text-slate-500">
+      <div className="mt-2 flex items-center justify-center gap-2 text-sm text-slate-500">
         <div
           className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 text-xs font-bold text-white"
           aria-label="NormalCompany"
