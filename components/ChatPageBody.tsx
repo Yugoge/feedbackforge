@@ -93,6 +93,7 @@ export function ChatPageBody({ employee }: Props) {
     sendMessage: session.sendMessage,
     resetSession: session.resetSession,
     setToast,
+    messages: session.messages,
   });
   const onSubmit = useSubmitHandler(inputValue, setInputValue, session.sendMessage);
   return (
