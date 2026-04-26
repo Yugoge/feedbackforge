@@ -2,9 +2,9 @@
   "spec_id": "spec-20260426-102329",
   "agent_type": "qa",
   "instance_id": null,
-  "agent_id": "ab04f1e0a6840c93e",
+  "agent_id": "a9cba09dcb34381bc",
   "is_running": true,
-  "checked_in_at": "2026-04-26T10:54:30Z",
+  "checked_in_at": "2026-04-26T10:56:26Z",
   "checked_out_at": null,
   "checkpoints": [
     {
