@@ -6,26 +6,6 @@
 
 ---
 
-## Role Mandate (from spec)
-
-> <!-- WHO WRITES: PM (autonomous mode) or User (user-spec mode) or BA (if Section 1 empty and BA has context) -->
-
-> <!-- WHO WRITES: Dev (after each implementation attempt) -->
-
-> <!-- WHO WRITES: Dev (after each implementation) -->
-
-> <!-- WHO WRITES: QA (after each verification) -->
-
-> <!-- WHO WRITES: BA (on first analysis) -->
-
-> <!-- WHO WRITES: QA (when verdict is fail) -->
-
-> <!-- WHO WRITES: QA (on fail) or PM-Retro -->
-
-> <!-- WHO WRITES: PM-Retro -->
-
----
-
 ## Pipeline Workflow
 
 # Spec: FeedbackForge → FeedbackCoach rebrand + 7 UI/prompt changes
