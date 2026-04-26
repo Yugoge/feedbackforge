@@ -8,10 +8,10 @@ type Props = {
   onStartOver: () => void;
 };
 
-// 3 action buttons rendered below the assistant draft message (spec 5.7.4).
-// Toast text in M24 is intentionally softened to avoid implying persistence
-// (ui-specialist F11): "Draft ready — copy it before your 1:1".
-export function DraftActions({ onAccept, onRefine, onStartOver }: Props) {
+// 2 action buttons rendered below the assistant draft message (spec 5.7.4).
+// CHANGE 4: "Start Over" button removed (Section 5 of spec-20260426-102329).
+// onStartOver prop retained for caller compatibility (no longer used here).
+export function DraftActions({ onAccept, onRefine }: Props) {
   return (
     <div className="mt-3 flex flex-wrap gap-2">
       <Button
@@ -26,13 +26,6 @@ export function DraftActions({ onAccept, onRefine, onStartOver }: Props) {
         className="min-h-11 border-blue-600 text-blue-600 hover:bg-blue-50 focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
       >
         Refine Further
-      </Button>
-      <Button
-        onClick={onStartOver}
-        variant="outline"
-        className="min-h-11 border-slate-300 text-slate-600 hover:bg-slate-50 focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-      >
-        Start Over
       </Button>
     </div>
   );
