@@ -7,6 +7,12 @@
 
 ---
 
+## Role Mandate
+
+> <!-- WHO WRITES: Dev (after each implementation attempt) -->
+
+---
+
 ## Section 1: Before — File Map (line-level baseline rows)
 
 - `app/page.tsx`
