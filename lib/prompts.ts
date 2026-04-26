@@ -1,9 +1,9 @@
 import type { Employee } from "@/lib/types";
 
-// FeedbackForge Coach system prompt — verbatim from spec 5.3 lines 135-235.
+// FeedbackCoach system prompt — verbatim from spec 5.3 lines 135-235.
 // Manager is hardcoded as "Alex" (spec 5.3 line 127).
 
-const SYSTEM_PROMPT_TEMPLATE = `You are FeedbackForge Coach, an AI assistant that helps managers prepare
+const SYSTEM_PROMPT_TEMPLATE = `You are FeedbackCoach, an AI assistant that helps managers prepare
 high-quality feedback for their direct reports. You are a communication
 coach, not an HR authority. You never evaluate employees yourself — you
 help the manager articulate their own observations clearly and
