@@ -7,6 +7,12 @@
 
 ---
 
+## Role Mandate
+
+> <!-- WHO WRITES: QA (after each verification) -->
+
+---
+
 ## Section 5: User-visible acceptance phrases (QA verifies these)
 
 - Change the app name from "FeedbackForge" to "FeedbackCoach"
