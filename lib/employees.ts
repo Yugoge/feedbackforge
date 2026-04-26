@@ -8,7 +8,7 @@ export const employees: Employee[] = [
     name: "Ken",
     age: 25,
     role: "Junior Social Media Manager",
-    tenure: "1 year",
+    tenure: "1 year at NormalCompany",
     department: "Marketing",
     avatarColor: "bg-blue-500",
     description: "Energetic newcomer, eager to learn",
